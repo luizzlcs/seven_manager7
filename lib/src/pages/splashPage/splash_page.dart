@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:seven_manager/src/core/constants/app_router.dart';
 
 Widget preview() {
   return const SplashPage();
@@ -17,7 +18,7 @@ class _SplashPageState extends State<SplashPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.delayed(
         const Duration(seconds: 4),
-        () => Navigator.of(context).pushNamed('/login'),
+        () => Navigator.of(context).pushReplacementNamed(AppRouter.login),
       );
     });
     super.initState();
