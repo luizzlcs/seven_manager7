@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:seven_manager/src/pages/auth/login/login_page.dart';
+import 'package:seven_manager/src/pages/homePage/home_page.dart';
 import 'package:seven_manager/src/pages/splashPage/splash_page.dart';
 
 import '../../pages/auth/recoverPassword/recover_password_page.dart';
@@ -34,10 +35,12 @@ abstract class AppRouter {
       login: (BuildContext context) => const LoginPage(),
       register: (BuildContext context) => const RegisterPage(),
       recover: (BuildContext context) => const RecoverPasswordPage(),
+      homePage: (BuildContext context) => const HomePage(),
     };
   }
 
   static const login = '/login';
   static const register = '/register';
   static const recover = '/recover';
+  static const homePage = '/home-page';
 }
