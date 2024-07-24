@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:seven_manager/src/core/constants/app_images.dart';
 import 'package:seven_manager/src/core/constants/app_router.dart';
 import 'package:seven_manager/src/core/theme/seven_manager_theme.dart';
 import 'package:seven_manager/src/pages/auth/login/login_controller.dart';
 import 'package:validatorless/validatorless.dart';
 
+import '../../../core/injection/injection.dart';
 import 'widgets/image_logo_widget.dart';
+import 'widgets/loader_seven_maneger.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,16 +18,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final formKey = GlobalKey<FormState>();
-  final emailEC = TextEditingController();
-  final passwordEC = TextEditingController();
-  final _controller = LoginController();
+  final LoginController loginController = getIt();
+  // final _controller = LoginController();
   bool isVisible = false;
 
   @override
   void dispose() {
-    emailEC.dispose();
-    passwordEC.dispose();
+    loginController.emailEC.dispose();
+    loginController.passwordEC.dispose();
     super.dispose();
   }
 
@@ -55,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(30),
                   child: Form(
-                    key: formKey,
+                    key: loginController.formKey,
                     child: Column(
                       children: [
                         const SizedBox(height: 30),
@@ -63,6 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                         const SizedBox(height: 20),
                         const SizedBox(height: 32),
                         TextFormField(
+                          controller: loginController.emailEC,
                           style: const TextStyle(
                               color: SevenManagerTheme.tealBlue),
                           decoration: const InputDecoration(
@@ -77,61 +79,59 @@ class _LoginPageState extends State<LoginPage> {
                               Validatorless.email(
                                   'O valor digitado não é um E-mail válido.'),
                               Validatorless.required(
-                                  'Você aind anão digitou um E-mail.')
+                                  'Você ainda anão digitou um E-mail.')
                             ],
                           ),
                         ),
                         const SizedBox(height: 12),
-                        TextFormField(
-                          obscureText: !isVisible,
-                          style: const TextStyle(
-                            color: SevenManagerTheme.tealBlue,
-                          ),
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(
-                              Icons.key_outlined,
-                              size: 28,
-                            ),
-                            suffixIcon: AnimatedBuilder(
-                              animation: _controller,
-                              builder: (context, child) {
-                                return IconButton(
+                        AnimatedBuilder(
+                          animation: loginController,
+                          builder: (context, child) {
+                            return TextFormField(
+                              controller: loginController.passwordEC,
+                              obscureText: !loginController.isVisible,
+                              style: const TextStyle(
+                                color: SevenManagerTheme.tealBlue,
+                              ),
+                              decoration: InputDecoration(
+                                prefixIcon: const Icon(
+                                  Icons.key_outlined,
+                                  size: 28,
+                                ),
+                                suffixIcon: IconButton(
                                   onPressed: () {
-                                    _controller.changeVisible();
-                                    setState(() {
-                                      isVisible = _controller.isVisible;
-                                    });
+                                    loginController.changeVisible();
                                   },
                                   icon: isVisible
                                       ? const Icon(Icons.visibility_outlined)
                                       : const Icon(
                                           Icons.visibility_off_outlined),
-                                );
-                              },
-                            ),
-                            label: const Text('Senha'),
-                          ),
-                          validator: Validatorless.required(
-                              'Você ainda não digitou a senha.'),
+                                ),
+                                label: const Text('Senha'),
+                              ),
+                              validator: Validatorless.required(
+                                  'Você ainda não digitou a senha.'),
+                            );
+                          },
                         ),
                         const SizedBox(height: 32),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                final valid =
-                                    formKey.currentState?.validate() ?? false;
-                                if (valid) {
-                                  Navigator.of(context)
-                                      .pushReplacementNamed(AppRouter.homePage);
-                                } else {
-                                  print('Login ou senha inválidos');
-                                }
-                              },
-                              child: const Text('ENTRAR'),
-                            ),
-                          ],
+                        AnimatedBuilder(
+                          animation: loginController,
+                          builder: (context, child) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                (loginController.isLoading)
+                                    ? LoaderSevenManeger()
+                                    : ElevatedButton(
+                                        onPressed: () {
+                                          loginController.login(context);
+                                        },
+                                        child: const Text('ENTRAR'),
+                                      ),
+                              ],
+                            );
+                          },
                         ),
                         const SizedBox(height: 32),
                         TextButton(
