@@ -12,8 +12,9 @@ final class SevenManagerTheme {
   static const blackColor = Color(0xFF000000);
 
   static final _defaultInputBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(15),
-      borderSide: const BorderSide(color: tealBlue, width: 1));
+    borderRadius: BorderRadius.circular(15),
+    borderSide: const BorderSide(color: tealBlue, width: 1),
+  );
 
   static final lightTheme = ThemeData(
     colorScheme: ColorScheme.fromSeed(seedColor: tealBlue),
@@ -40,6 +41,11 @@ final class SevenManagerTheme {
         borderSide: const BorderSide(color: Colors.red),
       ),
     ),
+
+    appBarTheme: const AppBarTheme(
+      iconTheme: IconThemeData(color: greenYellow),
+    ),
+
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         backgroundColor: Colors.white,
@@ -51,8 +57,12 @@ final class SevenManagerTheme {
           borderRadius: BorderRadius.circular(16),
         ),
         textStyle: const TextStyle(
-            fontFamily: 'Inter', fontSize: 15, fontWeight: FontWeight.bold),
+          fontFamily: 'Inter',
+          fontSize: 15,
+          fontWeight: FontWeight.bold,
+        ),
       ),
+
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -69,6 +79,7 @@ final class SevenManagerTheme {
         ),
       ),
     ),
+    
   );
 
   static final darkTheme = lightTheme;
@@ -79,17 +90,5 @@ final class SevenManagerTheme {
     fontSize: 12,
     fontWeight: FontWeight.w600,
   );
-  static const fonteSizeInter15px = TextStyle(
-    fontFamily: 'Inter',
-    color: blackColor,
-    fontSize: 15,
-    fontWeight: FontWeight.w500,
-  );
-
-  static const titleStyle = TextStyle(
-    fontFamily: 'Inter',
-    color: tealBlue,
-    fontSize: 24,
-    fontWeight: FontWeight.w700,
-  );
+ 
 }
