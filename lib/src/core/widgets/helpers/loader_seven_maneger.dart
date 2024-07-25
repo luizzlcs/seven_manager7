@@ -5,6 +5,7 @@ import 'package:seven_manager/src/core/theme/seven_manager_theme.dart';
 class LoaderSevenManeger extends StatelessWidget {
   const LoaderSevenManeger({super.key});
 
+  @override
   Widget build(BuildContext context) {
     return Center(
       child: LoadingAnimationWidget.fourRotatingDots(
