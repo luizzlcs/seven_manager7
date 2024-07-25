@@ -23,7 +23,6 @@ class LoginController with ChangeNotifier {
   void changeVisible() {
     isVisible = !isVisible;
     notifyListeners();
-    print(isVisible);
   }
 
   Future<void> login(BuildContext context) async {
