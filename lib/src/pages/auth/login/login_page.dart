@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:seven_manager/src/core/constants/app_images.dart';
 import 'package:seven_manager/src/core/constants/app_router.dart';
 import 'package:seven_manager/src/core/theme/seven_manager_theme.dart';
@@ -8,7 +7,7 @@ import 'package:validatorless/validatorless.dart';
 
 import '../../../core/injection/injection.dart';
 import 'widgets/image_logo_widget.dart';
-import 'widgets/loader_seven_maneger.dart';
+import '../../../core/widgets/helpers/loader_seven_maneger.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -19,8 +18,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final LoginController loginController = getIt();
-  // final _controller = LoginController();
-  bool isVisible = false;
 
   @override
   void dispose() {
@@ -44,19 +41,19 @@ class _LoginPageState extends State<LoginPage> {
           ),
           Expanded(
             flex: 2,
-            child: SingleChildScrollView(
-              child: Container(
-                height: sizeOf.height,
-                width: sizeOf.width,
-                decoration: const BoxDecoration(
-                    color: SevenManagerTheme.whiteColor,
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(50),
-                    )),
-                child: Padding(
-                  padding: const EdgeInsets.all(30),
-                  child: Form(
-                    key: loginController.formKey,
+            child: Container(
+              height: sizeOf.height,
+              width: sizeOf.width,
+              decoration: const BoxDecoration(
+                  color: SevenManagerTheme.whiteColor,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(50),
+                  )),
+              child: Padding(
+                padding: const EdgeInsets.all(30),
+                child: Form(
+                  key: loginController.formKey,
+                  child: SingleChildScrollView(
                     child: Column(
                       children: [
                         const SizedBox(height: 30),
@@ -102,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                                   onPressed: () {
                                     loginController.changeVisible();
                                   },
-                                  icon: isVisible
+                                  icon: loginController.isVisible
                                       ? const Icon(Icons.visibility_outlined)
                                       : const Icon(
                                           Icons.visibility_off_outlined),
@@ -122,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 (loginController.isLoading)
-                                    ? LoaderSevenManeger()
+                                    ? const LoaderSevenManeger()
                                     : ElevatedButton(
                                         onPressed: () {
                                           loginController.login(context);
@@ -139,7 +136,6 @@ class _LoginPageState extends State<LoginPage> {
                               .pushNamed(AppRouter.recover),
                           child: const Text(
                             'Esqueci minha senha',
-                            // style: SincofarmaTheme.titleSmallBold,
                           ),
                         ),
                         Row(
@@ -147,14 +143,12 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             const Text(
                               'Não tem uma conta?',
-                              // style: SincofarmaTheme.titleSmallRegular,
                             ),
                             TextButton(
                               onPressed: () => Navigator.of(context)
                                   .pushNamed(AppRouter.register),
                               child: const Text(
                                 'Cadastre-se?',
-                                // style: SincofarmaTheme.titleSmallBold,
                               ),
                             )
                           ],
