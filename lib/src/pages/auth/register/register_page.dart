@@ -166,16 +166,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               ElevatedButton(
-                                onPressed: () {
-                                  final valid = registerController
-                                          .formKey.currentState
-                                          ?.validate() ??
-                                      false;
-                                  if (valid) {
-                                    registerController.checkPasswordsMatch();
-                                  } else {
-                                    registerController.checkPasswordsMatch();
-                                  }
+                                onPressed: () {                                                                   
+                                  registerController.createUser(context);
                                 },
                                 child: const Text('Criar usuário'),
                               ),
