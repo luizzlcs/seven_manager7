@@ -54,16 +54,21 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Form(
                       key: registerController.formKey,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           const SizedBox(height: 20),
-                          BorderedText(
-                            strokeWidth: 9.0,
-                            strokeColor: SevenManagerTheme.tealBlue,
-                            child: const Text(
-                              'CRIAR NOVO USUÁRIO',
-                              style: TextStyle(
-                                color: SevenManagerTheme.whiteColor,
-                                fontSize: 30,
+                          Center(
+                            child: BorderedText(
+                              strokeWidth: 9.0,
+                              strokeColor: SevenManagerTheme.tealBlue,
+                              child: const Text(
+                                textAlign: TextAlign.center,
+                                
+                                'CRIAR NOVO USUÁRIO',
+                                style: TextStyle(
+                                  color: SevenManagerTheme.whiteColor,
+                                  fontSize: 30,
+                                ),
                               ),
                             ),
                           ),
@@ -94,7 +99,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             animation: registerController,
                             builder: (context, child) {
                               return TextFormField(
-                                obscureText: registerController.isVisible,
+                                obscureText: !registerController.isVisible,
                                 controller: registerController.passwordEC,
                                 validator: Validatorless.multiple([
                                   Validatorless.required(
@@ -108,7 +113,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     onPressed: () {
                                       registerController.changeVisible();
                                     },
-                                    icon: !registerController.isVisible
+                                    icon: registerController.isVisible
                                         ? const Icon(Icons.visibility)
                                         : const Icon(Icons.visibility_off),
                                   ),
@@ -138,7 +143,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           Icons.check_circle_sharp,
                                           color:
                                               SevenManagerTheme.mediumSeaGreen,
-                                          size: 30,
+                                          size: 20,
                                         )
                                       : IconButton(
                                           onPressed: () {
@@ -149,7 +154,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           icon: const Icon(
                                             Icons.do_not_disturb_on,
                                             color: SevenManagerTheme.redOrange,
-                                            size: 30,
+                                            size: 20,
                                           ),
                                         ),
                                 ),
