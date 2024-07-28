@@ -208,8 +208,6 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
                                   ? const LinearProgressIndicator()
                                   : ElevatedButton(
                                       onPressed: () {
-                                        print(
-                                            'BOTÃO CRIAR USUÁRIO: ${registerController.registerStatus}');
                                         _formSubmit();
                                       },
                                       child: const Text('Criar usuário'),

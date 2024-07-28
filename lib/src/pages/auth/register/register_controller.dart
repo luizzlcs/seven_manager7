@@ -18,18 +18,22 @@ class RegisterController with ChangeNotifier {
   RegisterStatus _registerStatus = RegisterStatus.initial;
   RegisterStatus get registerStatus => _registerStatus;
 
-  bool isVisible = false;
-  bool passwordMatch = true;
+  bool _isVisible = false;
+  bool get isVisible => _isVisible;
+
+  bool _passwordMatch = true;
+  bool get passwordMatch => _passwordMatch;
+
   String _message = '';
   String get message => _message;
 
   void changeVisible() {
-    isVisible = !isVisible;
+    _isVisible = !_isVisible;
     notifyListeners();
   }
 
   void checkPasswordsMatch(String password, String confirmPassword) {
-    passwordMatch = password == confirmPassword;
+    _passwordMatch = password == confirmPassword;
     notifyListeners();
   }
 
@@ -40,7 +44,6 @@ class RegisterController with ChangeNotifier {
   }) async {
     _registerStatus = RegisterStatus.loading;
     notifyListeners();
-    print('>> STATUS LODING: ${RegisterStatus.loading}');
     final String? auth = await firebaseAuth.createUser(
         name: name, email: email, password: password);
 
