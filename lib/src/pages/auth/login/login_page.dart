@@ -7,7 +7,7 @@ import 'package:validatorless/validatorless.dart';
 
 import '../../../core/injection/injection.dart';
 import 'widgets/image_logo_widget.dart';
-import '../../../core/widgets/helpers/loader_seven_maneger.dart';
+import '../../../core/widgets/helpers/loader.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,7 +16,7 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> with Loader{
   final LoginController loginController = getIt();
 
   @override
@@ -119,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 (loginController.isLoading)
-                                    ? const LoaderSevenManeger()
+                                    ? const Text('Incrementar loader aqui.')
                                     : ElevatedButton(
                                         onPressed: () {
                                           loginController.login(context);
