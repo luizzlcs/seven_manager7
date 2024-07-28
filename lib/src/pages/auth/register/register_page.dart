@@ -2,6 +2,8 @@ import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:seven_manager/src/core/injection/injection.dart';
 import 'package:seven_manager/src/core/theme/seven_manager_theme.dart';
+import 'package:seven_manager/src/core/widgets/helpers/loader.dart';
+import 'package:seven_manager/src/core/widgets/helpers/messages.dart';
 import 'package:seven_manager/src/pages/auth/register/register_controller.dart';
 import 'package:validatorless/validatorless.dart';
 
@@ -12,18 +14,62 @@ class RegisterPage extends StatefulWidget {
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterPageState extends State<RegisterPage> with Loader {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController nameEC = TextEditingController();
+  final TextEditingController emailEC = TextEditingController();
+  final TextEditingController passwordEC = TextEditingController();
+  final TextEditingController confirmePasswordEC = TextEditingController();
+
   final RegisterController registerController = getIt();
 
   @override
   void initState() {
-    registerController.confirmePasswordEC.addListener(() {
-      registerController.checkPasswordsMatch();
+    confirmePasswordEC.addListener(() {
+      registerController.checkPasswordsMatch(
+          passwordEC.text, confirmePasswordEC.text);
     });
-    registerController.passwordEC.addListener(() {
-      registerController.checkPasswordsMatch();
+    passwordEC.addListener(() {
+      registerController.checkPasswordsMatch(
+          passwordEC.text, confirmePasswordEC.text);
     });
+
+    registerController.addListener(_handleStatusChange);
+
     super.initState();
+  }
+
+  void _handleStatusChange() {
+    print('Chamando função do switch');
+    print('registerStatus: ${registerController.registerStatus}');
+    switch (registerController.registerStatus) {
+      case RegisterStatus.initial:
+        break;
+      case RegisterStatus.loading:
+        showLoader();
+        break;
+      case RegisterStatus.success:
+        hideLoader();
+        Navigator.of(context).pop();
+        Messages.showSuccess(registerController.message, context);
+        break;
+      case RegisterStatus.error:
+        hideLoader();
+        print('>>>MESSAGEM DE ERRO INIT: ${registerController.message}');
+        Messages.showError(registerController.message, context);
+    }
+  }
+
+  Future<void> _formSubmit() async {
+    final valid = formKey.currentState?.validate() ?? false;
+
+    if (valid) {
+      registerController.createUser(
+        name: nameEC.text,
+        email: emailEC.text,
+        password: passwordEC.text,
+      );
+    }
   }
 
   @override
@@ -52,7 +98,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: Padding(
                     padding: const EdgeInsets.all(30.0),
                     child: Form(
-                      key: registerController.formKey,
+                      key: formKey,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -63,7 +109,6 @@ class _RegisterPageState extends State<RegisterPage> {
                               strokeColor: SevenManagerTheme.tealBlue,
                               child: const Text(
                                 textAlign: TextAlign.center,
-                                
                                 'CRIAR NOVO USUÁRIO',
                                 style: TextStyle(
                                   color: SevenManagerTheme.whiteColor,
@@ -74,7 +119,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           const SizedBox(height: 50),
                           TextFormField(
-                            controller: registerController.nameEC,
+                            controller: nameEC,
                             validator: Validatorless.required(
                                 'O nome do usuário é necessário'),
                             decoration: const InputDecoration(
@@ -83,7 +128,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           const SizedBox(height: 20),
                           TextFormField(
-                            controller: registerController.emailEC,
+                            controller: emailEC,
                             validator: Validatorless.multiple([
                               Validatorless.required(
                                   'Digite o e-mail para o usuário'),
@@ -100,7 +145,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             builder: (context, child) {
                               return TextFormField(
                                 obscureText: !registerController.isVisible,
-                                controller: registerController.passwordEC,
+                                controller: passwordEC,
                                 validator: Validatorless.multiple([
                                   Validatorless.required(
                                       'Você precisa digitar um senha'),
@@ -126,14 +171,12 @@ class _RegisterPageState extends State<RegisterPage> {
                             animation: registerController,
                             builder: (context, child) {
                               return TextFormField(
-                                obscureText: true,
-                                controller:
-                                    registerController.confirmePasswordEC,
+                                obscureText: !registerController.isVisible,
+                                controller: confirmePasswordEC,
                                 validator: Validatorless.multiple([
                                   Validatorless.required(
                                       'Digite a senha de confirmação'),
-                                  Validatorless.compare(
-                                      registerController.passwordEC,
+                                  Validatorless.compare(passwordEC,
                                       'As senhas digitadas não coincidem')
                                 ]),
                                 decoration: InputDecoration(
@@ -147,9 +190,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         )
                                       : IconButton(
                                           onPressed: () {
-                                            registerController
-                                                .confirmePasswordEC
-                                                .clear();
+                                            confirmePasswordEC.clear();
                                           },
                                           icon: const Icon(
                                             Icons.do_not_disturb_on,
@@ -166,8 +207,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               ElevatedButton(
-                                onPressed: () {                                                                   
-                                  registerController.createUser(context);
+                                onPressed: () {
+                                  _formSubmit();
                                 },
                                 child: const Text('Criar usuário'),
                               ),
