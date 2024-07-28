@@ -12,7 +12,7 @@ mixin Loader<T extends StatefulWidget> on State<T> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return LoadingAnimationWidget.fourRotatingDots(
+          return LoadingAnimationWidget.inkDrop(
             color: SevenManagerTheme.tealBlue,
             size: 90,
           );
