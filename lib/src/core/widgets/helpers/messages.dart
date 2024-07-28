@@ -6,21 +6,31 @@ sealed class Messages {
   static void showError(String message, BuildContext context) {
     showTopSnackBar(
       Overlay.of(context),
-      CustomSnackBar.error(message: message),
+      CustomSnackBar.error(
+        backgroundColor: const Color(0XFF842439),
+        message: message,
+      ),
     );
   }
 
   static void showInfo(String message, BuildContext context) {
     showTopSnackBar(
       Overlay.of(context),
-      CustomSnackBar.info(message: message),
+      CustomSnackBar.info(
+        backgroundColor: const Color.fromARGB(255, 14, 124, 172),
+        message: message,
+      ),
     );
   }
 
   static void showSuccess(String message, BuildContext context) {
     showTopSnackBar(
       Overlay.of(context),
-      CustomSnackBar.success(message: message),
+      CustomSnackBar.success(
+        backgroundColor: const Color(0XFF237D68),
+        message: message,
+      ),
+      animationDuration: const Duration(seconds: 2),
     );
   }
 }
