@@ -40,13 +40,11 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
   }
 
   void _handleStatusChange() {
-    print('Chamando função do switch');
-    print('registerStatus: ${registerController.registerStatus}');
     switch (registerController.registerStatus) {
       case RegisterStatus.initial:
         break;
       case RegisterStatus.loading:
-        showLoader();
+         showLoader();
         break;
       case RegisterStatus.success:
         hideLoader();
@@ -55,7 +53,6 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
         break;
       case RegisterStatus.error:
         hideLoader();
-        print('>>>MESSAGEM DE ERRO INIT: ${registerController.message}');
         Messages.showError(registerController.message, context);
     }
   }
@@ -206,12 +203,17 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  _formSubmit();
-                                },
-                                child: const Text('Criar usuário'),
-                              ),
+                              registerController.registerStatus ==
+                                      RegisterStatus.loading
+                                  ? const LinearProgressIndicator()
+                                  : ElevatedButton(
+                                      onPressed: () {
+                                        print(
+                                            'BOTÃO CRIAR USUÁRIO: ${registerController.registerStatus}');
+                                        _formSubmit();
+                                      },
+                                      child: const Text('Criar usuário'),
+                                    )
                             ],
                           )
                         ],

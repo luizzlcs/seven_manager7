@@ -40,6 +40,7 @@ class RegisterController with ChangeNotifier {
   }) async {
     _registerStatus = RegisterStatus.loading;
     notifyListeners();
+    print('>> STATUS LODING: ${RegisterStatus.loading}');
     final String? auth = await firebaseAuth.createUser(
         name: name, email: email, password: password);
 
