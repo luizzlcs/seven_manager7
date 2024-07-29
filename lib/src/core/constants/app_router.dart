@@ -3,6 +3,7 @@ import 'package:seven_manager/src/pages/auth/login/login_page.dart';
 import 'package:seven_manager/src/pages/homePage/home_page.dart';
 import 'package:seven_manager/src/pages/splashPage/splash_page.dart';
 
+import '../../../router_page.dart';
 import '../../pages/auth/recoverPassword/recover_password_page.dart';
 import '../../pages/auth/register/register_page.dart';
 
@@ -32,6 +33,7 @@ abstract class AppRouter {
   static Map<String, WidgetBuilder> get router {
     return {
       '/': (BuildContext context) => const SplashPage(),
+      routerPage: (BuildContext context) => const RouterPage(),
       login: (BuildContext context) => const LoginPage(),
       register: (BuildContext context) => const RegisterPage(),
       recover: (BuildContext context) => const RecoverPasswordPage(),
@@ -39,6 +41,7 @@ abstract class AppRouter {
     };
   }
 
+  static const routerPage = '/router-page';
   static const login = '/login';
   static const register = '/register';
   static const recover = '/recover';
