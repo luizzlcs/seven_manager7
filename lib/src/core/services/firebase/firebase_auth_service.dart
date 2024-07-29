@@ -71,4 +71,20 @@ class FirebaseAuthService {
   Stream<User?> get user {
     return _auth.authStateChanges();
   }
+
+  Future<String?> recovery({required String email}) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      return null;
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case 'invalid-email':
+          return 'O e-mail digiteado é inválido';
+        case 'user-not-found':
+          return 'Usuário não cadastrado';
+        default:
+          return 'Erro não identificado';
+      }
+    }
+  }
 }
