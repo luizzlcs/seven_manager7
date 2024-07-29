@@ -44,6 +44,7 @@ final class SevenManagerTheme {
 
     appBarTheme: const AppBarTheme(
       iconTheme: IconThemeData(color: greenYellow),
+      backgroundColor: SevenManagerTheme.tealBlue
     ),
 
     outlinedButtonTheme: OutlinedButtonThemeData(
