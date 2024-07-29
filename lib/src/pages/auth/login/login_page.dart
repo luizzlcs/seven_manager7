@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:seven_manager/src/core/constants/app_images.dart';
 import 'package:seven_manager/src/core/constants/app_router.dart';
 import 'package:seven_manager/src/core/theme/seven_manager_theme.dart';
+import 'package:seven_manager/src/core/widgets/helpers/seven_loader.dart';
 import 'package:seven_manager/src/pages/auth/login/login_controller.dart';
 import 'package:validatorless/validatorless.dart';
 
 import '../../../core/injection/injection.dart';
+import '../../../core/widgets/helpers/messages.dart';
 import 'widgets/image_logo_widget.dart';
 import '../../../core/widgets/helpers/loader.dart';
 
@@ -16,14 +18,51 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> with Loader{
+class _LoginPageState extends State<LoginPage> with Loader {
   final LoginController loginController = getIt();
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailEC = TextEditingController();
+  final TextEditingController _passwordEC = TextEditingController();
+
+  @override
+  void initState() {
+    loginController.addListener(_loginStatusChange);
+    super.initState();
+  }
 
   @override
   void dispose() {
-    loginController.emailEC.dispose();
-    loginController.passwordEC.dispose();
+    _emailEC.dispose();
+    _passwordEC.dispose();
+    loginController.removeListener(_loginStatusChange);
+    
     super.dispose();
+  }
+
+  void _loginStatusChange() {
+    switch (loginController.loginStatus) {
+      case LoginStatus.initial:
+        break;
+      case LoginStatus.loading:
+        break;
+      case LoginStatus.success:        
+        Messages.showSuccess(loginController.message, context);
+        break;
+      case LoginStatus.error:
+        Messages.showError(loginController.message, context);
+    }
+  }
+
+  Future<void> _formSubmit() async {
+    final valid = _formKey.currentState?.validate() ?? false;
+
+    if (valid) {
+      loginController.login(
+        _emailEC.text,
+        _passwordEC.text,
+      );
+    }
   }
 
   @override
@@ -52,7 +91,7 @@ class _LoginPageState extends State<LoginPage> with Loader{
               child: Padding(
                 padding: const EdgeInsets.all(30),
                 child: Form(
-                  key: loginController.formKey,
+                  key: _formKey,
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
@@ -61,7 +100,7 @@ class _LoginPageState extends State<LoginPage> with Loader{
                         const SizedBox(height: 20),
                         const SizedBox(height: 32),
                         TextFormField(
-                          controller: loginController.emailEC,
+                          controller: _emailEC,
                           style: const TextStyle(
                               color: SevenManagerTheme.tealBlue),
                           decoration: const InputDecoration(
@@ -85,7 +124,7 @@ class _LoginPageState extends State<LoginPage> with Loader{
                           animation: loginController,
                           builder: (context, child) {
                             return TextFormField(
-                              controller: loginController.passwordEC,
+                              controller: _passwordEC,
                               obscureText: !loginController.isVisible,
                               style: const TextStyle(
                                 color: SevenManagerTheme.tealBlue,
@@ -118,11 +157,12 @@ class _LoginPageState extends State<LoginPage> with Loader{
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                (loginController.isLoading)
-                                    ? const Text('Incrementar loader aqui.')
+                                (loginController.loginStatus ==
+                                        LoginStatus.loading)
+                                    ? const SevenLoader()
                                     : ElevatedButton(
                                         onPressed: () {
-                                          loginController.login(context);
+                                         _formSubmit();
                                         },
                                         child: const Text('ENTRAR'),
                                       ),
