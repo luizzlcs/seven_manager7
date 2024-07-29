@@ -1,11 +1,14 @@
 import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
+import 'package:seven_manager/src/core/constants/app_router.dart';
 import 'package:seven_manager/src/core/injection/injection.dart';
 import 'package:seven_manager/src/core/theme/seven_manager_theme.dart';
 import 'package:seven_manager/src/core/widgets/helpers/loader.dart';
 import 'package:seven_manager/src/core/widgets/helpers/messages.dart';
 import 'package:seven_manager/src/pages/auth/register/register_controller.dart';
 import 'package:validatorless/validatorless.dart';
+
+import '../../../core/widgets/helpers/seven_loader.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -34,25 +37,32 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
           passwordEC.text, confirmePasswordEC.text);
     });
 
-    registerController.addListener(_handleStatusChange);
+    registerController.addListener(_registerStatusChange);
 
     super.initState();
   }
 
-  void _handleStatusChange() {
+  @override
+  void dispose() {
+    nameEC.dispose();
+    emailEC.dispose();
+    passwordEC.dispose();
+    confirmePasswordEC.dispose();
+    registerController.removeListener(_registerStatusChange);
+    super.dispose();
+  }
+
+  void _registerStatusChange() {
     switch (registerController.registerStatus) {
       case RegisterStatus.initial:
         break;
       case RegisterStatus.loading:
-         showLoader();
         break;
       case RegisterStatus.success:
-        hideLoader();
-        Navigator.of(context).pop();
+        Navigator.of(context).pushNamed(AppRouter.homePage);
         Messages.showSuccess(registerController.message, context);
         break;
       case RegisterStatus.error:
-        hideLoader();
         Messages.showError(registerController.message, context);
     }
   }
@@ -72,9 +82,7 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: SevenManagerTheme.tealBlue,
-      ),
+      appBar: AppBar(),
       body: Column(
         children: [
           const SizedBox(
@@ -103,12 +111,12 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
                           Center(
                             child: BorderedText(
                               strokeWidth: 9.0,
-                              strokeColor: SevenManagerTheme.tealBlue,
+                              strokeColor: SevenManagerTheme.whiteColor,
                               child: const Text(
                                 textAlign: TextAlign.center,
                                 'CRIAR NOVO USUÁRIO',
                                 style: TextStyle(
-                                  color: SevenManagerTheme.whiteColor,
+                                  color: SevenManagerTheme.tealBlue,
                                   fontSize: 30,
                                 ),
                               ),
@@ -200,19 +208,24 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
                             },
                           ),
                           const SizedBox(height: 20),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              registerController.registerStatus ==
-                                      RegisterStatus.loading
-                                  ? const LinearProgressIndicator()
-                                  : ElevatedButton(
-                                      onPressed: () {
-                                        _formSubmit();
-                                      },
-                                      child: const Text('Criar usuário'),
-                                    )
-                            ],
+                          AnimatedBuilder(
+                            animation: registerController,
+                            builder: (context, child) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  registerController.registerStatus ==
+                                          RegisterStatus.loading
+                                      ? const SevenLoader()
+                                      : ElevatedButton(
+                                          onPressed: () {
+                                            _formSubmit();
+                                          },
+                                          child: const Text('Criar usuário'),
+                                        )
+                                ],
+                              );
+                            },
                           )
                         ],
                       ),
