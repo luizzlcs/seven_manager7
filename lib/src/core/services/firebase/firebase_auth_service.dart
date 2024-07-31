@@ -79,7 +79,7 @@ class FirebaseAuthService {
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'invalid-email':
-          return 'O e-mail digiteado é inválido';
+          return 'O e-mail digitado é inválido';
         case 'user-not-found':
           return 'Usuário não cadastrado';
         default:
