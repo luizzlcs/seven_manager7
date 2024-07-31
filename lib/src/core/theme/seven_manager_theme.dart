@@ -29,6 +29,7 @@ final class SevenManagerTheme {
         color: tealBlue,
         fontWeight: FontWeight.w400,
       ),
+      hintStyle: const TextStyle(color: Colors.grey),
       floatingLabelStyle: const TextStyle(
         color: tealBlue,
         fontWeight: FontWeight.w600,
@@ -43,6 +44,7 @@ final class SevenManagerTheme {
     ),
 
     appBarTheme: const AppBarTheme(
+      titleTextStyle: TextStyle(color: whiteColor, fontSize: 30),
       iconTheme: IconThemeData(color: greenYellow),
       backgroundColor: SevenManagerTheme.tealBlue
     ),
