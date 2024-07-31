@@ -84,7 +84,9 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text('Criar conta'),
+      ),
       body: Column(
         children: [
           const SizedBox(
@@ -101,17 +103,15 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
                     topRight: Radius.circular(30),
                   ),
                 ),
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(30.0),
-                    child: Form(
-                      key: formKey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Container(
-                            height: 600,
-                            color: SevenManagerTheme.whiteColor,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: SizedBox(
                             child: PageView(
                               controller: _controller,
                               children: const [
@@ -121,23 +121,22 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
                               ],
                             ),
                           ),
-                          const SizedBox(
-                             height: 40,
+                        ),
+                        const SizedBox(height: 10),
+                        SmoothPageIndicator(
+                          controller: _controller,
+                          count: 3,
+                          effect: const ExpandingDotsEffect(
+                            activeDotColor: SevenManagerTheme.tealBlue,
+                            dotColor: Color.fromARGB(255, 117, 188, 230),
+                            dotHeight: 16,
+                            dotWidth: 16,
+                            spacing: 12,
+                            //verticalOffset: 50,
                           ),
-                          SmoothPageIndicator(
-                            controller: _controller,
-                            count: 3,
-                            effect: ExpandingDotsEffect(
-                              activeDotColor: Colors.deepPurple,
-                              dotColor: Colors.deepPurple.shade100,
-                              dotHeight: 30,
-                              dotWidth: 30,
-                              spacing: 16,
-                              //verticalOffset: 50,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(height: 10),
+                      ],
                     ),
                   ),
                 ),
