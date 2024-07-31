@@ -43,6 +43,7 @@ dependencies:
   loading_animation_widget: ^1.2.1
   bordered_text: ^2.0.0
   smooth_page_indicator: ^1.2.0+3
+  brasil_fields: ^1.15.0
 
 dev_dependencies:
   flutter_test:
