@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseAuthService {
@@ -7,6 +6,7 @@ class FirebaseAuthService {
 
   Future<String?> createUser({
     required name,
+    String? photoURL,
     required String email,
     required String password,
   }) async {
@@ -14,6 +14,7 @@ class FirebaseAuthService {
       UserCredential userCredential = await _auth
           .createUserWithEmailAndPassword(email: email, password: password);
       await userCredential.user!.updateDisplayName(name);
+      await userCredential.user!.updatePhotoURL(photoURL);
       return null;
     } on FirebaseAuthException catch (e, s) {
       switch (e.code) {
@@ -79,7 +80,7 @@ class FirebaseAuthService {
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'invalid-email':
-          return 'O e-mail digiteado é inválido';
+          return 'O e-mail digitado é inválido';
         case 'user-not-found':
           return 'Usuário não cadastrado';
         default:
