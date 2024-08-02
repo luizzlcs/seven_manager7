@@ -17,7 +17,7 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.delayed(
-        const Duration(seconds: 1),
+        const Duration(seconds: 5),
         () => Navigator.of(context).pushReplacementNamed(AppRouter.routerPage),
       );
     });
@@ -26,10 +26,18 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    final sizeOf = MediaQuery.sizeOf(context);
+
+    return Scaffold(
       body: Center(
-        child: Image(
-          image: AssetImage('assets/images/logo_seven_manager.png'),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: ((sizeOf.width) - (sizeOf.width * 0.8)) / 2,
+            vertical: 10,
+          ),
+          child: const Image(
+            image: AssetImage('assets/images/logo_seven_manager.png'),
+          ),
         ),
       ),
     );
