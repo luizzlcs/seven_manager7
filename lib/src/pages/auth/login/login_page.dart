@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> with Loader {
     _emailEC.dispose();
     _passwordEC.dispose();
     loginController.removeListener(_loginStatusChange);
-    
+
     super.dispose();
   }
 
@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> with Loader {
         break;
       case LoginStatus.loading:
         break;
-      case LoginStatus.success:        
+      case LoginStatus.success:
         Messages.showSuccess(loginController.message, context);
         break;
       case LoginStatus.error:
@@ -96,7 +96,9 @@ class _LoginPageState extends State<LoginPage> with Loader {
                     child: Column(
                       children: [
                         const SizedBox(height: 30),
-                        Image.asset(AppImages.logoGApp),
+                        Image.asset(
+                          AppImages.logoGApp,
+                        ),
                         const SizedBox(height: 20),
                         const SizedBox(height: 32),
                         TextFormField(
@@ -162,7 +164,7 @@ class _LoginPageState extends State<LoginPage> with Loader {
                                     ? const SevenLoader()
                                     : ElevatedButton(
                                         onPressed: () {
-                                         _formSubmit();
+                                          _formSubmit();
                                         },
                                         child: const Text('ENTRAR'),
                                       ),

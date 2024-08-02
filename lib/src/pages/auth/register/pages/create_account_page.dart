@@ -1,20 +1,15 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:seven_manager/src/core/constants/app_images.dart';
 import 'package:seven_manager/src/core/constants/app_router.dart';
 import 'package:seven_manager/src/core/injection/injection.dart';
 import 'package:seven_manager/src/core/theme/seven_manager_theme.dart';
 import 'package:seven_manager/src/core/widgets/helpers/loader.dart';
 import 'package:seven_manager/src/core/widgets/helpers/messages.dart';
-import 'package:seven_manager/src/core/widgets/imageProvider/image_profile_controller.dart';
 import 'package:seven_manager/src/pages/auth/register/register_controller.dart';
 import 'package:validatorless/validatorless.dart';
 
 import '../../../../core/widgets/helpers/seven_loader.dart';
-import '../../../../core/widgets/imageProvider/image_provider_widget.dart';
-import '../../../../core/widgets/imageProvider/modal_bottom_sheet.dart';
+import '../../../../core/widgets/imageAvatar/image_avatar_widget.dart';
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({super.key});
@@ -135,7 +130,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> with Loader {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      ImageLogoWidget(),
+                      ImageAvatarWidget(),
                       // const ImageLogoWidget(pathImage: AppImages.logoIasd),
                       const SizedBox(height: 10),
                       TextFormField(

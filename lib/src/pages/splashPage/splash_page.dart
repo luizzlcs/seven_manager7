@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:seven_manager/src/core/constants/app_images.dart';
 import 'package:seven_manager/src/core/constants/app_router.dart';
 
 Widget preview() {
@@ -17,7 +18,7 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.delayed(
-        const Duration(seconds: 5),
+        const Duration(seconds: 1),
         () => Navigator.of(context).pushReplacementNamed(AppRouter.routerPage),
       );
     });
@@ -36,7 +37,7 @@ class _SplashPageState extends State<SplashPage> {
             vertical: 10,
           ),
           child: const Image(
-            image: AssetImage('assets/images/logo_seven_manager.png'),
+            image: AssetImage(AppImages.logoApp),
           ),
         ),
       ),
