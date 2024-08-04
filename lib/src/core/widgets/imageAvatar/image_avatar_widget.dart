@@ -1,9 +1,11 @@
 import 'dart:developer';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:seven_manager/src/core/constants/app_images.dart';
 import 'package:seven_manager/src/core/injection/injection.dart';
+import 'package:seven_manager/src/core/services/firebase/firebase_storage_service.dart';
 import 'package:seven_manager/src/core/theme/seven_manager_theme.dart';
 import 'package:seven_manager/src/core/widgets/helpers/messages.dart';
 import 'package:seven_manager/src/core/widgets/imageAvatar/image_profile_controller.dart';
@@ -11,7 +13,6 @@ import 'package:seven_manager/src/core/widgets/imageAvatar/image_profile_control
 import 'options_bottom_sheet.dart';
 
 class ImageAvatarWidget extends StatefulWidget {
-
   const ImageAvatarWidget({super.key});
 
   @override
@@ -20,19 +21,22 @@ class ImageAvatarWidget extends StatefulWidget {
 
 class _ImageAvatarWidgetState extends State<ImageAvatarWidget> {
   final ImageProfileController _imageController = getIt();
+  final FirebaseStorageService _storage = getIt();
 
-@override
+  @override
   void initState() {
     _imageController.addListener(message);
     super.initState();
   }
-  
-  void message(){
-    Messages.showError(_imageController.message, context);
+
+  void message() {
+    if (_imageController.message.contains('Nenhuma')) {
+      Messages.showError(_imageController.message, context);
+    }
   }
+
   @override
   Widget build(BuildContext context) {
-    
     void showBottomSheet() {
       showModalBottomSheet(
         constraints: const BoxConstraints(maxWidth: 390),
@@ -51,7 +55,9 @@ class _ImageAvatarWidgetState extends State<ImageAvatarWidget> {
             onRemoveTap: () {
               Navigator.of(context).pop();
               _imageController.clear();
-              log('Incrementar método de limparsssss URL da imagem');
+              if (_imageController.urlImage != null) {
+                _storage.deleteImage(_imageController.urlImage!);
+              }
             },
           );
         },
