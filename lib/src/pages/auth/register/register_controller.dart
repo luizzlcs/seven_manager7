@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:seven_manager/src/core/services/firebase/firebase_auth_service.dart';
+import 'package:seven_manager/src/core/services/firebase/auth_service_firebase_impl.dart';
 
 enum RegisterStatus { initial, loading, success, error }
 
 class RegisterController with ChangeNotifier {
   RegisterController({required this.firebaseAuth});
 
-  final FirebaseAuthService firebaseAuth;
+  final AuthServiceFirebaseImpl firebaseAuth;
 
   RegisterStatus registerStatus = RegisterStatus.initial;
   bool isVisible = false;

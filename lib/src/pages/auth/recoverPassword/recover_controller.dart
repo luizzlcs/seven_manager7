@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'package:seven_manager/src/core/services/firebase/firebase_auth_service.dart';
+import 'package:seven_manager/src/core/services/firebase/auth_service_firebase_impl.dart';
 
 enum RecoverStatus { initial, loading, success, error }
 
 class RecoverController with ChangeNotifier {
   RecoverController({required this.firebaseAuth});
 
-  final FirebaseAuthService firebaseAuth;
+  final AuthServiceFirebaseImpl firebaseAuth;
 
   RecoverStatus recoverStatus = RecoverStatus.initial;
   String message = '';
