@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:seven_manager/src/core/services/firebase/firebase_storage_service.dart';
 import 'package:seven_manager/src/core/widgets/imageAvatar/image_profile_controller.dart';
@@ -12,7 +13,8 @@ final getIt = GetIt.I;
 void configureDependencies() {
   log('Inicio da configuração de dependência');
 
-  getIt.registerFactory(() => AuthServiceFirebaseImpl());
+  getIt.registerFactory(() => FirebaseAuth.instance);
+  getIt.registerFactory(() => AuthServiceFirebaseImpl(auth: getIt<FirebaseAuth>()));
   getIt.registerFactory(() => FirebaseStorageService());
   getIt.registerFactory(() => RecoverController(firebaseAuth: getIt<AuthServiceFirebaseImpl>()));
   getIt.registerFactory(() => RegisterController(firebaseAuth: getIt<AuthServiceFirebaseImpl>()));
