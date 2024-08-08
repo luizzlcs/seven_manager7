@@ -2,36 +2,42 @@ import 'dart:convert';
 
 class ChurchsModel {
   const ChurchsModel({
-    required this.id,
-    required this.district,
-    required this.city,
-    required this.zipCode,
-    required this.street,
+    this.idChuchs,
+    required this.districtChuchs,
+    required this.cityChuchs,
+    required this.zipCodeChuchs,
+    required this.streetChuchs,
+    required this.stateChuchs,
   });
 
-  final String id;
-  final String district;
-  final String city;
-  final String zipCode;
-  final String street;
+  final String? idChuchs;
+  final String zipCodeChuchs;
+  final String streetChuchs;
+  final String districtChuchs;
+  final String cityChuchs;
+  final String stateChuchs;
+
+  
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'district': district,
-      'city': city,
-      'zipCode': zipCode,
-      'street': street,
+      'idChuchs': idChuchs,
+      'zipCodeChuchs': zipCodeChuchs,
+      'streetChuchs': streetChuchs,
+      'districtChuchs': districtChuchs,
+      'cityChuchs': cityChuchs,
+      'stateChuchs': stateChuchs,
     };
   }
 
   factory ChurchsModel.fromMap(Map<String, dynamic> map) {
     return ChurchsModel(
-      id: map['id'] ?? '',
-      district: map['district'] ?? '',
-      city: map['city'] ?? '',
-      zipCode: map['zipCode'] ?? '',
-      street: map['street'] ?? '',
+      idChuchs: map['idChuchs'],
+      zipCodeChuchs: map['zipCodeChuchs'] ?? '',
+      streetChuchs: map['streetChuchs'] ?? '',
+      districtChuchs: map['districtChuchs'] ?? '',
+      cityChuchs: map['cityChuchs'] ?? '',
+      stateChuchs: map['stateChuchs'] ?? '',
     );
   }
 
@@ -39,3 +45,5 @@ class ChurchsModel {
 
   factory ChurchsModel.fromJson(String source) => ChurchsModel.fromMap(json.decode(source));
 }
+
+
