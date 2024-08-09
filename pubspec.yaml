@@ -48,6 +48,7 @@ dependencies:
   phosphor_flutter: ^2.1.0
   firebase_storage: ^12.1.2
   image_cropper: ^8.0.1
+  cloud_firestore: ^5.2.0
 
 dev_dependencies:
   flutter_test:
