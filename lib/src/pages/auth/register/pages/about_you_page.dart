@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,42 +19,38 @@ class AboutYouPage extends StatefulWidget {
   State<AboutYouPage> createState() => _AboutYouPageState();
 }
 
-class _AboutYouPageState extends State<AboutYouPage> {
+class _AboutYouPageState extends State<AboutYouPage>
+    with AutomaticKeepAliveClientMixin {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController nameEC = TextEditingController();
-  final TextEditingController emailEC = TextEditingController();
-  final TextEditingController passwordEC = TextEditingController();
-  final TextEditingController confirmePasswordEC = TextEditingController();
+  final TextEditingController namePersonEC = TextEditingController();
+  final TextEditingController emailPersonEC = TextEditingController();
+  final TextEditingController dateOfBirthPersonEC = TextEditingController();
+  final TextEditingController cpfEC = TextEditingController();
+  final TextEditingController malePersonEC = TextEditingController();
+  final TextEditingController whastAppPersonEC = TextEditingController();
+  final TextEditingController numberPersonEC = TextEditingController();
+  final TextEditingController cityPersonEC = TextEditingController();
+  final TextEditingController zipCodePersonEC = TextEditingController();
+  final TextEditingController statePersonEC = TextEditingController();
+  final TextEditingController streetPersonEC = TextEditingController();
+  final TextEditingController isPostalServicePersonEC = TextEditingController();
+  final TextEditingController complementPersonEC = TextEditingController();
+
   String _selectedOption = 'Masculino';
   bool _confirmAddress = false;
 
   final RegisterController registerController = getIt();
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
-    confirmePasswordEC.addListener(() {
-      registerController.checkPasswordsMatch(
-          passwordEC.text, confirmePasswordEC.text);
-    });
-    passwordEC.addListener(() {
-      registerController.checkPasswordsMatch(
-          passwordEC.text, confirmePasswordEC.text);
-    });
-
-    registerController.addListener(_registerStatusChange);
-
     super.initState();
   }
 
   @override
-  void dispose() {
-    nameEC.dispose();
-    emailEC.dispose();
-    passwordEC.dispose();
-    confirmePasswordEC.dispose();
-    registerController.removeListener(_registerStatusChange);
-    super.dispose();
-  }
+  void dispose() {}
 
   void _registerStatusChange() {
     switch (registerController.registerStatus) {
@@ -73,16 +71,24 @@ class _AboutYouPageState extends State<AboutYouPage> {
     final valid = formKey.currentState?.validate() ?? false;
 
     if (valid) {
-      registerController.createUser(
-        name: nameEC.text,
-        email: emailEC.text,
-        password: passwordEC.text,
+      registerController.createPerson(
+        namePerson: namePersonEC.text,
+        dateOfBirthPerson: dateOfBirthPersonEC.text,
+        cpf: cpfEC.text,
+        malePerson: malePersonEC.text,
+        whastAppPerson: whastAppPersonEC.text,
+        numberPerson: numberPersonEC.text,
+        cityPerson: cityPersonEC.text,
+        zipCodePerson: zipCodePersonEC.text,
+        statePerson: statePersonEC.text,
+        streetPerson: streetPersonEC.text,
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       children: [
         const SizedBox(
@@ -144,7 +150,7 @@ class _AboutYouPageState extends State<AboutYouPage> {
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
-                        controller: nameEC,
+                        controller: cpfEC,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
@@ -165,7 +171,7 @@ class _AboutYouPageState extends State<AboutYouPage> {
                       ),
                       const SizedBox(height: 20),
                       TextFormField(
-                        controller: emailEC,
+                        controller: emailPersonEC,
                         keyboardType: TextInputType.datetime,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
@@ -190,7 +196,7 @@ class _AboutYouPageState extends State<AboutYouPage> {
                         animation: registerController,
                         builder: (context, child) {
                           return TextFormField(
-                            controller: passwordEC,
+                            controller: whastAppPersonEC,
                             keyboardType: TextInputType.phone,
                             validator:
                                 Validatorless.required('Campo obrigatório'),
@@ -215,8 +221,7 @@ class _AboutYouPageState extends State<AboutYouPage> {
                         animation: registerController,
                         builder: (context, child) {
                           return TextFormField(
-                            obscureText: !registerController.isVisible,
-                            controller: confirmePasswordEC,
+                            controller: zipCodePersonEC,
                             keyboardType: TextInputType.number,
                             decoration: const InputDecoration(
                               label: Text('Cep'),
@@ -231,8 +236,7 @@ class _AboutYouPageState extends State<AboutYouPage> {
                       ),
                       const SizedBox(height: 20),
                       TextFormField(
-                        obscureText: !registerController.isVisible,
-                        controller: confirmePasswordEC,
+                        controller: streetPersonEC,
                         decoration: const InputDecoration(
                           label: Text('Logradouro'),
                           hintText: 'Rua, aveninda, travessa...',
@@ -247,8 +251,7 @@ class _AboutYouPageState extends State<AboutYouPage> {
                       Flex(direction: Axis.horizontal, children: [
                         Flexible(
                           child: TextFormField(
-                            obscureText: !registerController.isVisible,
-                            controller: confirmePasswordEC,
+                            controller: numberPersonEC,
                             decoration: const InputDecoration(
                               label: Text('Número'),
                               hintText: 'Rua, aveninda, travessa...',
@@ -263,8 +266,7 @@ class _AboutYouPageState extends State<AboutYouPage> {
                         const SizedBox(width: 8),
                         Flexible(
                           child: TextFormField(
-                            obscureText: !registerController.isVisible,
-                            controller: confirmePasswordEC,
+                            controller: complementPersonEC,
                             decoration: const InputDecoration(
                               label: Text('Complemento'),
                               prefixIcon: Icon(
@@ -280,8 +282,7 @@ class _AboutYouPageState extends State<AboutYouPage> {
                       Flex(direction: Axis.horizontal, children: [
                         Flexible(
                           child: TextFormField(
-                            obscureText: !registerController.isVisible,
-                            controller: confirmePasswordEC,
+                            controller: cityPersonEC,
                             decoration: const InputDecoration(
                               label: Text('Cidade'),
                               prefixIcon: Icon(
@@ -295,8 +296,7 @@ class _AboutYouPageState extends State<AboutYouPage> {
                         const SizedBox(width: 8),
                         Flexible(
                           child: TextFormField(
-                            obscureText: !registerController.isVisible,
-                            controller: confirmePasswordEC,
+                            controller: statePersonEC,
                             decoration: const InputDecoration(
                               label: Text('Estado'),
                               prefixIcon: Icon(
@@ -316,7 +316,7 @@ class _AboutYouPageState extends State<AboutYouPage> {
                           color: SevenManagerTheme.lightCyan,
                           border: Border(
                               top: BorderSide(
-                            color: SevenManagerTheme.redOrange,
+                            color: SevenManagerTheme.tealBlue,
                           )),
                           borderRadius: BorderRadius.all(
                             Radius.circular(20),
@@ -359,7 +359,7 @@ class _AboutYouPageState extends State<AboutYouPage> {
                                   ? const SevenLoader()
                                   : ElevatedButton.icon(
                                       onPressed: () {
-                                        _formSubmit();
+                                        log('${registerController.dataAcountPage}');
                                       },
                                       label: const Text('Avançar'),
                                       icon: const Icon(Icons.account_circle),

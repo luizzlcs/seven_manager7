@@ -19,6 +19,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> with Loader {
+  
   final LoginController loginController = getIt();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();

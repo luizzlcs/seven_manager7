@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:seven_manager/src/core/constants/app_router.dart';
+import 'package:seven_manager/src/core/injection/injection.dart';
 import 'package:seven_manager/src/core/services/firebase/auth_service_firebase_impl.dart';
 
 class HomePage extends StatelessWidget {
@@ -8,7 +9,7 @@ class HomePage extends StatelessWidget {
 
    @override
    Widget build(BuildContext context) {
-   AuthServiceFirebaseImpl auth = AuthServiceFirebaseImpl();
+   AuthServiceFirebaseImpl auth = getIt();
        return Scaffold(
            appBar: AppBar(title: const Text('Home Page'),),
            body: Center(

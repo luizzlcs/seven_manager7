@@ -1,3 +1,4 @@
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:seven_manager/src/core/constants/app_router.dart';
@@ -5,6 +6,7 @@ import 'package:seven_manager/src/core/injection/injection.dart';
 import 'package:seven_manager/src/core/theme/seven_manager_theme.dart';
 import 'package:seven_manager/src/core/widgets/helpers/loader.dart';
 import 'package:seven_manager/src/core/widgets/helpers/messages.dart';
+import 'package:seven_manager/src/model/user_model.dart';
 import 'package:seven_manager/src/pages/auth/register/register_controller.dart';
 import 'package:validatorless/validatorless.dart';
 
@@ -18,7 +20,8 @@ class CreateAccountPage extends StatefulWidget {
   State<CreateAccountPage> createState() => _CreateAccountPageState();
 }
 
-class _CreateAccountPageState extends State<CreateAccountPage> with Loader {
+class _CreateAccountPageState extends State<CreateAccountPage>
+    with Loader, AutomaticKeepAliveClientMixin {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController nameEC = TextEditingController();
   final TextEditingController emailEC = TextEditingController();
@@ -26,6 +29,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> with Loader {
   final TextEditingController confirmePasswordEC = TextEditingController();
 
   final RegisterController registerController = getIt();
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -40,6 +46,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> with Loader {
 
     registerController.addListener(_registerStatusChange);
 
+    nameEC.addListener(_onTextFieldChange);
+    emailEC.addListener(_onTextFieldChange);
+    passwordEC.addListener(_onTextFieldChange);
+
     super.initState();
   }
 
@@ -51,6 +61,19 @@ class _CreateAccountPageState extends State<CreateAccountPage> with Loader {
     confirmePasswordEC.dispose();
     registerController.removeListener(_registerStatusChange);
     super.dispose();
+  }
+
+  void _onTextFieldChange() {
+    UserModel userModel = UserModel(
+      userName: nameEC.text,
+      userEmail: emailEC.text,
+      userPassword: passwordEC.text,
+    );
+    Map<String, dynamic> userMap = userModel.toMap();
+
+    log('UserMap: $userMap');
+    registerController.changeDataAcountPage(userMap);
+    log('DADOS DA CONTA: ${registerController.dataAcountPage}');
   }
 
   void _registerStatusChange() {
@@ -69,19 +92,16 @@ class _CreateAccountPageState extends State<CreateAccountPage> with Loader {
   }
 
   Future<void> _formSubmit() async {
-    final valid = formKey.currentState?.validate() ?? false;
+    formKey.currentState?.validate() ?? false;
+  }
 
-    if (valid) {
-      registerController.createUser(
-        name: nameEC.text,
-        email: emailEC.text,
-        password: passwordEC.text,
-      );
-    }
+  void minhaFuncao() {
+    registerController.callFormSubmit(formSubmitFunction: _formSubmit);
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       children: [
         const SizedBox(
@@ -130,7 +150,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> with Loader {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      ImageAvatarWidget(),
+                      const ImageAvatarWidget(),
                       // const ImageLogoWidget(pathImage: AppImages.logoIasd),
                       const SizedBox(height: 10),
                       TextFormField(
@@ -249,8 +269,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> with Loader {
                                   : ElevatedButton.icon(
                                       onPressed: () {
                                         _formSubmit();
+                                        _onTextFieldChange();
                                       },
-                                      label: const Text('Avançar'),
+                                      label: const Text('1 Avançar'),
                                       icon: const Icon(Icons.account_circle),
                                     )
                             ],

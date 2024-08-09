@@ -1,5 +1,9 @@
+import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:seven_manager/src/core/constants/app_images.dart';
+import 'package:seven_manager/src/core/services/firebase/auth_service_firebase_impl.dart';
+import 'package:seven_manager/src/core/widgets/helpers/seven_loader.dart';
 import 'package:seven_manager/src/pages/auth/login/widgets/image_logo_widget.dart';
 import 'package:validatorless/validatorless.dart';
 
@@ -16,37 +20,33 @@ class AboutYouChurchPage extends StatefulWidget {
   State<AboutYouChurchPage> createState() => _AboutYouChurchPageState();
 }
 
-class _AboutYouChurchPageState extends State<AboutYouChurchPage> {
+class _AboutYouChurchPageState extends State<AboutYouChurchPage>
+    with AutomaticKeepAliveClientMixin {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController nameEC = TextEditingController();
-  final TextEditingController emailEC = TextEditingController();
-  final TextEditingController passwordEC = TextEditingController();
-  final TextEditingController confirmePasswordEC = TextEditingController();
+
+  final TextEditingController zipCodeChuchsEC = TextEditingController();
+  final TextEditingController streetChuchsEC = TextEditingController();
+  final TextEditingController districtChuchsEC = TextEditingController();
+  final TextEditingController cityChuchsEC = TextEditingController();
+  final TextEditingController stateChuchsEC = TextEditingController();
 
   final RegisterController registerController = getIt();
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
-    confirmePasswordEC.addListener(() {
-      registerController.checkPasswordsMatch(
-          passwordEC.text, confirmePasswordEC.text);
-    });
-    passwordEC.addListener(() {
-      registerController.checkPasswordsMatch(
-          passwordEC.text, confirmePasswordEC.text);
-    });
-
-    registerController.addListener(_registerStatusChange);
-
     super.initState();
   }
 
   @override
   void dispose() {
-    nameEC.dispose();
-    emailEC.dispose();
-    passwordEC.dispose();
-    confirmePasswordEC.dispose();
+    zipCodeChuchsEC.dispose();
+    streetChuchsEC.dispose();
+    districtChuchsEC.dispose();
+    cityChuchsEC.dispose();
+    stateChuchsEC.dispose();
     registerController.removeListener(_registerStatusChange);
     super.dispose();
   }
@@ -70,16 +70,19 @@ class _AboutYouChurchPageState extends State<AboutYouChurchPage> {
     final valid = formKey.currentState?.validate() ?? false;
 
     if (valid) {
-      registerController.createUser(
-        name: nameEC.text,
-        email: emailEC.text,
-        password: passwordEC.text,
+      registerController.createChurchs(
+        zipCodeChuchs: zipCodeChuchsEC.text,
+        streetChuchs: streetChuchsEC.text,
+        districtChuchs: districtChuchsEC.text,
+        cityChuchs: cityChuchsEC.text,
+        stateChuchs: stateChuchsEC.text,
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       children: [
         const SizedBox(
@@ -117,7 +120,7 @@ class _AboutYouChurchPageState extends State<AboutYouChurchPage> {
                       const ImageLogoWidget(pathImage: AppImages.logoIasd),
                       const SizedBox(height: 8),
                       TextFormField(
-                        controller: nameEC,
+                        controller: zipCodeChuchsEC,
                         validator: Validatorless.required(
                             'O nome do usuário é necessário'),
                         decoration: const InputDecoration(
@@ -130,6 +133,95 @@ class _AboutYouChurchPageState extends State<AboutYouChurchPage> {
                         ),
                       ),
                       const SizedBox(height: 20),
+                      TextFormField(
+                        controller: streetChuchsEC,
+                        validator: Validatorless.required(
+                            'O nome do usuário é necessário'),
+                        decoration: const InputDecoration(
+                          label: Text('Nome'),
+                          prefixIcon: Icon(
+                            Icons.person,
+                            color: SevenManagerTheme.tealBlue,
+                            size: 28,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: districtChuchsEC,
+                        validator: Validatorless.required(
+                            'O nome do usuário é necessário'),
+                        decoration: const InputDecoration(
+                          label: Text('Nome'),
+                          prefixIcon: Icon(
+                            Icons.person,
+                            color: SevenManagerTheme.tealBlue,
+                            size: 28,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: cityChuchsEC,
+                        validator: Validatorless.required(
+                            'O nome do usuário é necessário'),
+                        decoration: const InputDecoration(
+                          label: Text('Nome'),
+                          prefixIcon: Icon(
+                            Icons.person,
+                            color: SevenManagerTheme.tealBlue,
+                            size: 28,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: stateChuchsEC,
+                        validator: Validatorless.required(
+                            'O nome do usuário é necessário'),
+                        decoration: const InputDecoration(
+                          label: Text('Nome'),
+                          prefixIcon: Icon(
+                            Icons.person,
+                            color: SevenManagerTheme.tealBlue,
+                            size: 28,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      AnimatedBuilder(
+                        animation: registerController,
+                        builder: (context, child) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              registerController.registerStatus ==
+                                      RegisterStatus.loading
+                                  ? const SevenLoader()
+                                  : AnimatedBuilder(
+                                      animation: registerController,
+                                      builder: (context, child) {
+                                        print('AnimatedBuild rebuild');
+                                        return ElevatedButton.icon(
+                                          onPressed: () {
+                                                                                       
+                                              log('${registerController.dataAcountPage}');
+                                              log('${registerController.dataAcountPage['userName']}');
+                                              log('${registerController.dataAcountPage['userPassword']}');
+                                              log('VARIÁVEL isVisible: ${registerController.isVisible}');
+                                              log('EMAIL: ${registerController.emailUser}');
+                                            
+                                          },
+                                          label: const Text('Avançar'),
+                                          icon:
+                                              const Icon(Icons.account_circle),
+                                        );
+                                      },
+                                    ),
+                            ],
+                          );
+                        },
+                      )
                     ],
                   ),
                 ),

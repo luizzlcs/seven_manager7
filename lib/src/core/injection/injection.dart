@@ -17,9 +17,10 @@ void configureDependencies() {
   getIt.registerFactory(() => AuthServiceFirebaseImpl(auth: getIt<FirebaseAuth>()));
   getIt.registerFactory(() => FirebaseStorageService());
   getIt.registerFactory(() => RecoverController(firebaseAuth: getIt<AuthServiceFirebaseImpl>()));
-  getIt.registerFactory(() => RegisterController(firebaseAuth: getIt<AuthServiceFirebaseImpl>()));
+  getIt.registerLazySingleton<RegisterController>(() => RegisterController(firebaseAuth: getIt<AuthServiceFirebaseImpl>()));
   getIt.registerFactory(() => LoginController(firebaseAuth: getIt<AuthServiceFirebaseImpl>()));
   getIt.registerFactory(() => ImageProfileController(storage: getIt<FirebaseStorageService>()));
 
   log('Fim da configuração de dependência');
 }
+

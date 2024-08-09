@@ -10,6 +10,8 @@ import 'package:seven_manager/src/pages/auth/register/pages/create_account_page.
 import 'package:seven_manager/src/pages/auth/register/register_controller.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import 'pages/check_data.dart';
+
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
@@ -74,8 +76,8 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
 
     if (valid) {
       registerController.createUser(
-        name: nameEC.text,
-        email: emailEC.text,
+        namePerson: nameEC.text,
+        emailPerson: emailEC.text,
         password: passwordEC.text,
       );
     }
@@ -118,6 +120,7 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
                                 CreateAccountPage(),
                                 AboutYouPage(),
                                 AboutYouChurchPage(),
+                                CheckData(),
                               ],
                             ),
                           ),

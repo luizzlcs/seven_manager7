@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 class PersonsModel {
- const PersonsModel({
-    required this.idChurch,
+  const PersonsModel({
+    this.idChurch,
     required this.malePerson,
     required this.namePerson,
     required this.dateOfBirthPerson,
@@ -16,10 +16,9 @@ class PersonsModel {
     required this.cityPerson,
     required this.statePerson,
     this.isPostalServicePerson,
-
   });
 
-  final String idChurch;
+  final String? idChurch;
   final String namePerson;
   final String malePerson;
   final String dateOfBirthPerson;
@@ -33,11 +32,6 @@ class PersonsModel {
   final String cityPerson;
   final String statePerson;
   final bool? isPostalServicePerson;
-  
-
- 
-
-  
 
   Map<String, dynamic> toMap() {
     return {
@@ -79,5 +73,6 @@ class PersonsModel {
 
   String toJson() => json.encode(toMap());
 
-  factory PersonsModel.fromJson(String source) => PersonsModel.fromMap(json.decode(source));
+  factory PersonsModel.fromJson(String source) =>
+      PersonsModel.fromMap(json.decode(source));
 }
