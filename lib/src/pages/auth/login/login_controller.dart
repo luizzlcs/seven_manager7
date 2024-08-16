@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:seven_manager/src/core/services/firebase/firebase_auth_service.dart';
+import 'package:seven_manager/src/core/services/firebase/auth_service_firebase_impl.dart';
 
 enum LoginStatus { initial, loading, success, error }
 
 class LoginController with ChangeNotifier {
   LoginController({required this.firebaseAuth});
 
-  final FirebaseAuthService firebaseAuth;
+  final AuthServiceFirebaseImpl firebaseAuth;
 
   LoginStatus loginStatus = LoginStatus.initial;
   bool isVisible = false;

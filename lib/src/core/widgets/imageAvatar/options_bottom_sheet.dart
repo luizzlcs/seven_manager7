@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-class OpcoesBottomSheet extends StatelessWidget {
-  const OpcoesBottomSheet({
+class OptionsBottomSheet extends StatelessWidget {
+  const OptionsBottomSheet({
     super.key,
     required this.onGalleryTap,
     required this.onCameraTap,

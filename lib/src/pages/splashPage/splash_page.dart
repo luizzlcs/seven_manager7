@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:seven_manager/src/core/constants/app_images.dart';
 import 'package:seven_manager/src/core/constants/app_router.dart';
 
 Widget preview() {
@@ -26,10 +27,18 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    final sizeOf = MediaQuery.sizeOf(context);
+
+    return Scaffold(
       body: Center(
-        child: Image(
-          image: AssetImage('assets/images/logo_seven_manager.png'),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: ((sizeOf.width) - (sizeOf.width * 0.8)) / 2,
+            vertical: 10,
+          ),
+          child: const Image(
+            image: AssetImage(AppImages.logoApp),
+          ),
         ),
       ),
     );

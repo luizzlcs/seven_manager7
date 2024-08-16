@@ -19,6 +19,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> with Loader {
+  
   final LoginController loginController = getIt();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -36,7 +37,7 @@ class _LoginPageState extends State<LoginPage> with Loader {
     _emailEC.dispose();
     _passwordEC.dispose();
     loginController.removeListener(_loginStatusChange);
-    
+
     super.dispose();
   }
 
@@ -46,7 +47,7 @@ class _LoginPageState extends State<LoginPage> with Loader {
         break;
       case LoginStatus.loading:
         break;
-      case LoginStatus.success:        
+      case LoginStatus.success:
         Messages.showSuccess(loginController.message, context);
         break;
       case LoginStatus.error:
@@ -80,120 +81,125 @@ class _LoginPageState extends State<LoginPage> with Loader {
           ),
           Expanded(
             flex: 2,
-            child: Container(
-              height: sizeOf.height,
-              width: sizeOf.width,
-              decoration: const BoxDecoration(
-                  color: SevenManagerTheme.whiteColor,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(50),
-                  )),
-              child: Padding(
-                padding: const EdgeInsets.all(30),
-                child: Form(
-                  key: _formKey,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 30),
-                        Image.asset(AppImages.logoGApp),
-                        const SizedBox(height: 20),
-                        const SizedBox(height: 32),
-                        TextFormField(
-                          controller: _emailEC,
-                          style: const TextStyle(
-                              color: SevenManagerTheme.tealBlue),
-                          decoration: const InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.email,
-                              size: 28,
-                            ),
-                            label: Text('E-mail'),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+              child: Container(
+                height: sizeOf.height,
+                width: sizeOf.width,
+                decoration: const BoxDecoration(
+                    color: SevenManagerTheme.whiteColor,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(50),
+                    )),
+                child: Padding(
+                  padding: const EdgeInsets.all(30),
+                  child: Form(
+                    key: _formKey,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 30),
+                          Image.asset(
+                            AppImages.logoGApp,
                           ),
-                          validator: Validatorless.multiple(
-                            [
-                              Validatorless.email(
-                                  'O valor digitado não é um E-mail válido.'),
-                              Validatorless.required(
-                                  'Você ainda anão digitou um E-mail.')
+                          const SizedBox(height: 20),
+                          const SizedBox(height: 32),
+                          TextFormField(
+                            controller: _emailEC,
+                            style: const TextStyle(
+                                color: SevenManagerTheme.tealBlue),
+                            decoration: const InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.email,
+                                size: 28,
+                              ),
+                              label: Text('E-mail'),
+                            ),
+                            validator: Validatorless.multiple(
+                              [
+                                Validatorless.email(
+                                    'O valor digitado não é um E-mail válido.'),
+                                Validatorless.required(
+                                    'Você ainda anão digitou um E-mail.')
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          AnimatedBuilder(
+                            animation: loginController,
+                            builder: (context, child) {
+                              return TextFormField(
+                                controller: _passwordEC,
+                                obscureText: !loginController.isVisible,
+                                style: const TextStyle(
+                                  color: SevenManagerTheme.tealBlue,
+                                ),
+                                decoration: InputDecoration(
+                                  prefixIcon: const Icon(
+                                    Icons.key_outlined,
+                                    size: 28,
+                                  ),
+                                  suffixIcon: IconButton(
+                                    onPressed: () {
+                                      loginController.changeVisible();
+                                    },
+                                    icon: loginController.isVisible
+                                        ? const Icon(Icons.visibility_outlined)
+                                        : const Icon(
+                                            Icons.visibility_off_outlined),
+                                  ),
+                                  label: const Text('Senha'),
+                                ),
+                                validator: Validatorless.required(
+                                    'Você ainda não digitou a senha.'),
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 32),
+                          AnimatedBuilder(
+                            animation: loginController,
+                            builder: (context, child) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  (loginController.loginStatus ==
+                                          LoginStatus.loading)
+                                      ? const SevenLoader()
+                                      : ElevatedButton(
+                                          onPressed: () {
+                                            _formSubmit();
+                                          },
+                                          child: const Text('ENTRAR'),
+                                        ),
+                                ],
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 32),
+                          TextButton(
+                            onPressed: () => Navigator.of(context)
+                                .pushNamed(AppRouter.recover),
+                            child: const Text(
+                              'Esqueci minha senha',
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'Não tem uma conta?',
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.of(context)
+                                    .pushNamed(AppRouter.register),
+                                child: const Text(
+                                  'Cadastre-se?',
+                                ),
+                              )
                             ],
                           ),
-                        ),
-                        const SizedBox(height: 12),
-                        AnimatedBuilder(
-                          animation: loginController,
-                          builder: (context, child) {
-                            return TextFormField(
-                              controller: _passwordEC,
-                              obscureText: !loginController.isVisible,
-                              style: const TextStyle(
-                                color: SevenManagerTheme.tealBlue,
-                              ),
-                              decoration: InputDecoration(
-                                prefixIcon: const Icon(
-                                  Icons.key_outlined,
-                                  size: 28,
-                                ),
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    loginController.changeVisible();
-                                  },
-                                  icon: loginController.isVisible
-                                      ? const Icon(Icons.visibility_outlined)
-                                      : const Icon(
-                                          Icons.visibility_off_outlined),
-                                ),
-                                label: const Text('Senha'),
-                              ),
-                              validator: Validatorless.required(
-                                  'Você ainda não digitou a senha.'),
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 32),
-                        AnimatedBuilder(
-                          animation: loginController,
-                          builder: (context, child) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                (loginController.loginStatus ==
-                                        LoginStatus.loading)
-                                    ? const SevenLoader()
-                                    : ElevatedButton(
-                                        onPressed: () {
-                                         _formSubmit();
-                                        },
-                                        child: const Text('ENTRAR'),
-                                      ),
-                              ],
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 32),
-                        TextButton(
-                          onPressed: () => Navigator.of(context)
-                              .pushNamed(AppRouter.recover),
-                          child: const Text(
-                            'Esqueci minha senha',
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              'Não tem uma conta?',
-                            ),
-                            TextButton(
-                              onPressed: () => Navigator.of(context)
-                                  .pushNamed(AppRouter.register),
-                              child: const Text(
-                                'Cadastre-se?',
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

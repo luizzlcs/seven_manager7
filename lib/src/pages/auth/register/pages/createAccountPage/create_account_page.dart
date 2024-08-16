@@ -1,92 +1,30 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:seven_manager/src/core/constants/app_images.dart';
-import 'package:seven_manager/src/core/constants/app_router.dart';
-import 'package:seven_manager/src/core/injection/injection.dart';
 import 'package:seven_manager/src/core/theme/seven_manager_theme.dart';
 import 'package:seven_manager/src/core/widgets/helpers/loader.dart';
-import 'package:seven_manager/src/core/widgets/helpers/messages.dart';
-import 'package:seven_manager/src/core/widgets/imageProvider/image_profile_controller.dart';
-import 'package:seven_manager/src/pages/auth/register/register_controller.dart';
+import 'package:seven_manager/src/pages/auth/register/pages/createAccountPage/create_account_page_mixin.dart';
 import 'package:validatorless/validatorless.dart';
-
-import '../../../../core/widgets/helpers/seven_loader.dart';
-import '../../../../core/widgets/imageProvider/image_provider_widget.dart';
-import '../../../../core/widgets/imageProvider/modal_bottom_sheet.dart';
+import '../../../../../core/widgets/imageAvatar/image_avatar_widget.dart';
 
 class CreateAccountPage extends StatefulWidget {
-  const CreateAccountPage({super.key});
+  const CreateAccountPage({
+    super.key,
+  });
 
   @override
   State<CreateAccountPage> createState() => _CreateAccountPageState();
 }
 
-class _CreateAccountPageState extends State<CreateAccountPage> with Loader {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController nameEC = TextEditingController();
-  final TextEditingController emailEC = TextEditingController();
-  final TextEditingController passwordEC = TextEditingController();
-  final TextEditingController confirmePasswordEC = TextEditingController();
-
-  final RegisterController registerController = getIt();
-
+class _CreateAccountPageState extends State<CreateAccountPage>
+    with Loader, AutomaticKeepAliveClientMixin, CreateAccountPageMixin {
   @override
-  void initState() {
-    confirmePasswordEC.addListener(() {
-      registerController.checkPasswordsMatch(
-          passwordEC.text, confirmePasswordEC.text);
-    });
-    passwordEC.addListener(() {
-      registerController.checkPasswordsMatch(
-          passwordEC.text, confirmePasswordEC.text);
-    });
+  bool get wantKeepAlive => true;
 
-    registerController.addListener(_registerStatusChange);
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    nameEC.dispose();
-    emailEC.dispose();
-    passwordEC.dispose();
-    confirmePasswordEC.dispose();
-    registerController.removeListener(_registerStatusChange);
-    super.dispose();
-  }
-
-  void _registerStatusChange() {
-    switch (registerController.registerStatus) {
-      case RegisterStatus.initial:
-        break;
-      case RegisterStatus.loading:
-        break;
-      case RegisterStatus.success:
-        Navigator.of(context).pushNamed(AppRouter.homePage);
-        Messages.showSuccess(registerController.message, context);
-        break;
-      case RegisterStatus.error:
-        Messages.showError(registerController.message, context);
-    }
-  }
-
-  Future<void> _formSubmit() async {
-    final valid = formKey.currentState?.validate() ?? false;
-
-    if (valid) {
-      registerController.createUser(
-        name: nameEC.text,
-        email: emailEC.text,
-        password: passwordEC.text,
-      );
-    }
-  }
+  
+  
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       children: [
         const SizedBox(
@@ -105,7 +43,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> with Loader {
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Form(
-                  key: formKey,
+                  key: registerController.formKeyAccount,
                   child: Column(
                     children: [
                       const SizedBox(height: 10),
@@ -135,7 +73,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> with Loader {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      ImageLogoWidget(),
+                      const ImageAvatarWidget(),
                       // const ImageLogoWidget(pathImage: AppImages.logoIasd),
                       const SizedBox(height: 10),
                       TextFormField(
@@ -242,26 +180,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> with Loader {
                         },
                       ),
                       const SizedBox(height: 20),
-                      AnimatedBuilder(
-                        animation: registerController,
-                        builder: (context, child) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              registerController.registerStatus ==
-                                      RegisterStatus.loading
-                                  ? const SevenLoader()
-                                  : ElevatedButton.icon(
-                                      onPressed: () {
-                                        _formSubmit();
-                                      },
-                                      label: const Text('Avançar'),
-                                      icon: const Icon(Icons.account_circle),
-                                    )
-                            ],
-                          );
-                        },
-                      )
+                      
                     ],
                   ),
                 ),
