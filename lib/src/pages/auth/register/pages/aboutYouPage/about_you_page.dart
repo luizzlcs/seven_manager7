@@ -1,16 +1,10 @@
-import 'dart:developer';
-
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import 'package:seven_manager/src/pages/auth/register/pages/aboutYouPage/about_you_page_mixin.dart';
 import 'package:validatorless/validatorless.dart';
-
-import '../../../../core/constants/app_router.dart';
-import '../../../../core/injection/injection.dart';
-import '../../../../core/theme/seven_manager_theme.dart';
-import '../../../../core/widgets/helpers/messages.dart';
-import '../../../../core/widgets/helpers/seven_loader.dart';
-import '../register_controller.dart';
+import '../../../../../core/theme/seven_manager_theme.dart';
 
 class AboutYouPage extends StatefulWidget {
   const AboutYouPage({super.key});
@@ -20,70 +14,20 @@ class AboutYouPage extends StatefulWidget {
 }
 
 class _AboutYouPageState extends State<AboutYouPage>
-    with AutomaticKeepAliveClientMixin {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController namePersonEC = TextEditingController();
-  final TextEditingController emailPersonEC = TextEditingController();
-  final TextEditingController dateOfBirthPersonEC = TextEditingController();
-  final TextEditingController cpfEC = TextEditingController();
-  final TextEditingController malePersonEC = TextEditingController();
-  final TextEditingController whastAppPersonEC = TextEditingController();
-  final TextEditingController numberPersonEC = TextEditingController();
-  final TextEditingController cityPersonEC = TextEditingController();
-  final TextEditingController zipCodePersonEC = TextEditingController();
-  final TextEditingController statePersonEC = TextEditingController();
-  final TextEditingController streetPersonEC = TextEditingController();
-  final TextEditingController isPostalServicePersonEC = TextEditingController();
-  final TextEditingController complementPersonEC = TextEditingController();
-
-  String _selectedOption = 'Masculino';
-  bool _confirmAddress = false;
-
-  final RegisterController registerController = getIt();
-
+    with AutomaticKeepAliveClientMixin, AboutYouPageMixin {
   @override
   bool get wantKeepAlive => true;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {}
-
-  void _registerStatusChange() {
-    switch (registerController.registerStatus) {
-      case RegisterStatus.initial:
-        break;
-      case RegisterStatus.loading:
-        break;
-      case RegisterStatus.success:
-        Navigator.of(context).pushNamed(AppRouter.homePage);
-        Messages.showSuccess(registerController.message, context);
-        break;
-      case RegisterStatus.error:
-        Messages.showError(registerController.message, context);
+  String? validateDate(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Preenchimento obrigatório';
     }
-  }
-
-  Future<void> _formSubmit() async {
-    final valid = formKey.currentState?.validate() ?? false;
-
-    if (valid) {
-      registerController.createPerson(
-        namePerson: namePersonEC.text,
-        dateOfBirthPerson: dateOfBirthPersonEC.text,
-        cpf: cpfEC.text,
-        malePerson: malePersonEC.text,
-        whastAppPerson: whastAppPersonEC.text,
-        numberPerson: numberPersonEC.text,
-        cityPerson: cityPersonEC.text,
-        zipCodePerson: zipCodePersonEC.text,
-        statePerson: statePersonEC.text,
-        streetPerson: streetPersonEC.text,
-      );
+    try {
+      DateFormat('dd/MM/yyyy').parseStrict(value);
+    } catch (e) {
+      return 'Data inválida';
     }
+    return null;
   }
 
   @override
@@ -107,7 +51,7 @@ class _AboutYouPageState extends State<AboutYouPage>
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Form(
-                  key: formKey,
+                  key: registerController.formKeyYou,
                   child: Column(
                     children: [
                       const SizedBox(height: 10),
@@ -122,31 +66,30 @@ class _AboutYouPageState extends State<AboutYouPage>
                           ),
                         ),
                       ),
-                      Row(
-                        children: [
-                          RadioMenuButton<String>(
-                            value: 'Masculino',
-                            groupValue: _selectedOption,
-                            onChanged: (String? value) {
-                              setState(() {
-                                _selectedOption = value!;
-                                print(_selectedOption);
-                              });
-                            },
-                            child: const Text('Masculino'),
-                          ),
-                          RadioMenuButton<String>(
-                            value: 'Feminino',
-                            groupValue: _selectedOption,
-                            onChanged: (String? value) {
-                              setState(() {
-                                _selectedOption = value!;
-                                print(_selectedOption);
-                              });
-                            },
-                            child: const Text('Feminino'),
-                          ),
-                        ],
+                      AnimatedBuilder(
+                        animation: registerController,
+                        builder: (context, child) {
+                          return Row(
+                            children: [
+                              RadioMenuButton<String>(
+                                value: 'Masculino',
+                                groupValue: registerController.sexOption,
+                                onChanged: (String? value) {
+                                  registerController.changeSexOptions(value!);
+                                },
+                                child: const Text('Masculino'),
+                              ),
+                              RadioMenuButton<String>(
+                                value: 'Feminino',
+                                groupValue: registerController.sexOption,
+                                onChanged: (String? value) {
+                                  registerController.changeSexOptions(value!);
+                                },
+                                child: const Text('Feminino'),
+                              ),
+                            ],
+                          );
+                        },
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
@@ -171,17 +114,15 @@ class _AboutYouPageState extends State<AboutYouPage>
                       ),
                       const SizedBox(height: 20),
                       TextFormField(
-                        controller: emailPersonEC,
+                        controller: dateOfBirthPersonEC,
                         keyboardType: TextInputType.datetime,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                           DataInputFormatter()
                         ],
-                        validator: Validatorless.multiple([
-                          Validatorless.required('Preenchimento obrigatório'),
-                          Validatorless.date('Data inválida'),
-                        ]),
+                        validator: validateDate,
                         decoration: const InputDecoration(
+                          
                           label: Text('Data de nascimento'),
                           hintText: 'Data de nascimento Ex.: 22/04/2010',
                           prefixIcon: Icon(
@@ -327,15 +268,22 @@ class _AboutYouPageState extends State<AboutYouPage>
                           children: [
                             Flexible(
                               flex: 1,
-                              child: Checkbox(
-                                  semanticLabel: 'Confirmar',
-                                  value: _confirmAddress,
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      _confirmAddress = value!;
-                                      print(_confirmAddress);
-                                    });
-                                  }),
+                              child: Tooltip(
+                                message: 'Receber encomendas',
+                                child: AnimatedBuilder(
+                                  animation: registerController,
+                                  builder: (context, child) {
+                                    return Checkbox(
+                                      semanticLabel: 'Confirmar',
+                                      value: registerController.confirmAddress,
+                                      onChanged: (bool? value) {
+                                        registerController
+                                            .changeConfirmAddress();
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
                             ),
                             const SizedBox(width: 10),
                             const Flexible(
@@ -348,26 +296,6 @@ class _AboutYouPageState extends State<AboutYouPage>
                         ),
                       ),
                       const SizedBox(height: 20),
-                      AnimatedBuilder(
-                        animation: registerController,
-                        builder: (context, child) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              registerController.registerStatus ==
-                                      RegisterStatus.loading
-                                  ? const SevenLoader()
-                                  : ElevatedButton.icon(
-                                      onPressed: () {
-                                        log('${registerController.dataAcountPage}');
-                                      },
-                                      label: const Text('Avançar'),
-                                      icon: const Icon(Icons.account_circle),
-                                    )
-                            ],
-                          );
-                        },
-                      )
                     ],
                   ),
                 ),

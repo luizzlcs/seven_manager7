@@ -3,11 +3,11 @@ import 'dart:convert';
 class PersonsModel {
   const PersonsModel({
     this.idChurch,
+    this.namePerson,
+    this.emailPerson,
     required this.malePerson,
-    required this.namePerson,
     required this.dateOfBirthPerson,
     required this.cpf,
-    required this.emailPerson,
     required this.whastAppPerson,
     required this.streetPerson,
     required this.zipCodePerson,
@@ -17,13 +17,12 @@ class PersonsModel {
     required this.statePerson,
     this.isPostalServicePerson,
   });
-
   final String? idChurch;
-  final String namePerson;
+  final String? namePerson;
+  final String? emailPerson;
   final String malePerson;
   final String dateOfBirthPerson;
   final String cpf;
-  final String emailPerson;
   final String whastAppPerson;
   final String zipCodePerson;
   final String streetPerson;
@@ -36,11 +35,9 @@ class PersonsModel {
   Map<String, dynamic> toMap() {
     return {
       'idChurch': idChurch,
-      'namePerson': namePerson,
       'malePerson': malePerson,
       'dateOfBirthPerson': dateOfBirthPerson,
       'cpf': cpf,
-      'emailPerson': emailPerson,
       'whastAppPerson': whastAppPerson,
       'zipCodePerson': zipCodePerson,
       'streetPerson': streetPerson,
@@ -55,11 +52,9 @@ class PersonsModel {
   factory PersonsModel.fromMap(Map<String, dynamic> map) {
     return PersonsModel(
       idChurch: map['idChurch'] ?? '',
-      namePerson: map['namePerson'] ?? '',
       malePerson: map['malePerson'] ?? '',
       dateOfBirthPerson: map['dateOfBirthPerson'] ?? '',
       cpf: map['cpf'] ?? '',
-      emailPerson: map['emailPerson'] ?? '',
       whastAppPerson: map['whastAppPerson'] ?? '',
       zipCodePerson: map['zipCodePerson'] ?? '',
       streetPerson: map['streetPerson'] ?? '',

@@ -58,7 +58,7 @@ class AuthServiceFirebaseImpl {
 
         idChurchs = docRef.id;
 
-        log('Novo documento criado com sucesso ID: $docRef.');
+        log('Novo documento criado com sucesso ID: $docRef');
       }
     });
   }
@@ -80,11 +80,11 @@ class AuthServiceFirebaseImpl {
   }) async {
     final newPerson = PersonsModel(
       idChurch: idChurchs,
-      malePerson: malePerson,
       namePerson: namePerson,
+      emailPerson: emailPerson,
+      malePerson: malePerson,
       dateOfBirthPerson: dateOfBirthPerson,
       cpf: cpf,
-      emailPerson: emailUser,
       whastAppPerson: whastAppPerson,
       zipCodePerson: zipCodePerson,
       numberPerson: numberPerson,
