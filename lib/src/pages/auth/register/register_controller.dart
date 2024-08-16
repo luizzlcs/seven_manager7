@@ -1,6 +1,4 @@
-import 'dart:async';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:seven_manager/src/core/services/firebase/auth_service_firebase_impl.dart';
@@ -25,7 +23,6 @@ class RegisterController with ChangeNotifier {
 
   bool _checkValid = false;
   bool get checkValid => _checkValid;
-
 
   Map<String, dynamic> dataAcountPage = {};
   Map<String, dynamic> dataAboutYouPage = {};
@@ -81,24 +78,17 @@ class RegisterController with ChangeNotifier {
     dataAcountPage.addAll(data);
     log('DADOS ACCOUNT: $dataAcountPage');
 
-    notifyListeners();
+    // notifyListeners();
   }
 
   void changeDataAboutYouPage(Map<String, dynamic> data) {
-    
-      dataAboutYouPage.addAll(data);
-      log('DADOS YOU: $dataAboutYouPage');
-    
-
-    notifyListeners();
+    dataAboutYouPage.addAll(data);
+    log('DADOS YOU: $dataAboutYouPage');
   }
 
   void changeDataChurchPage(Map<String, dynamic> data) {
     dataChurchPage.addAll(data);
     log('DADOS CHURCH: $dataChurchPage');
-  
-      
-    notifyListeners();
   }
 
   Future<void> createUser() async {

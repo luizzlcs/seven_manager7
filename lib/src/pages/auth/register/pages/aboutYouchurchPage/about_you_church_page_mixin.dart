@@ -35,26 +35,20 @@ mixin AboutYouChurchPageMixin<T extends StatefulWidget> on State<T> {
 
   void _onTextFieldChange() {
     log('CHURCH MIXIN: Enviando dados para controller.');
-    
-    debouce.run(
-      () {
-        ChurchsModel churchModel = ChurchsModel(
-          districtChuchs: districtChuchsEC.text,
-          cityChuchs: cityChuchsEC.text,
-          zipCodeChuchs: zipCodeChuchsEC.text,
-          streetChuchs: streetChuchsEC.text,
-          stateChuchs: stateChuchsEC.text,
-        );
-        Map<String, dynamic> churchMap = churchModel.toMap();
 
-        registerController.changeDataChurchPage(churchMap);
-      },
+    ChurchsModel churchModel = ChurchsModel(
+      districtChuchs: districtChuchsEC.text,
+      cityChuchs: cityChuchsEC.text,
+      zipCodeChuchs: zipCodeChuchsEC.text,
+      streetChuchs: streetChuchsEC.text,
+      stateChuchs: stateChuchsEC.text,
     );
+    Map<String, dynamic> churchMap = churchModel.toMap();
+
+    registerController.changeDataChurchPage(churchMap);
   }
 
   void _checkDataAboutChurch() {
-    log('CHECK-VALID CHURCH: ${registerController.checkValid}');
-    if (registerController.checkValid) _onTextFieldChange();
-    
+    if (registerController.submitFormChurch()) _onTextFieldChange();
   }
 }

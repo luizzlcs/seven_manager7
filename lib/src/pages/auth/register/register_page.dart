@@ -35,7 +35,6 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
     log('FORMULÁRIO VALÍDO: PÁGINA $nextPage $valid');
     // if (valid) {
     registerController.setCheckValid();
-    log('CHECK VÁLID: ${registerController.checkValid}');
 
     registerController.resetCheckValid();
 
@@ -52,7 +51,6 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
 
   void accountNextPage() {
     log('SAINDO DA ACCOUNT PAGE');
-    log('CHECKVALID ACCOUNT: ${registerController.checkValid}');
     _handleNextPage(
         submitForm: registerController.submitFormAcount, nextPage: 1);
   }
@@ -63,7 +61,6 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
 
   void churchNextPage() {
     log('SAINDO DA CHURCH PAGE');
-    log('CHECKVALID CHURCH: ${registerController.checkValid}');
     _handleNextPage(
         submitForm: registerController.submitFormChurch, nextPage: 3);
   }

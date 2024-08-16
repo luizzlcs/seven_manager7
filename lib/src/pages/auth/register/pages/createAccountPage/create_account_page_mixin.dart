@@ -29,7 +29,6 @@ mixin CreateAccountPageMixin<T extends StatefulWidget> on State<T> {
     });
 
     registerController.addListener(_checkDataAccount);
-    // confirmePasswordEC.addListener(_registerStatusChange);
 
     super.initState();
   }
@@ -45,7 +44,7 @@ mixin CreateAccountPageMixin<T extends StatefulWidget> on State<T> {
   }
 
   void _onTextFieldChange() {
-    debounce.run(() {
+   
       log('ACCOUNT: Enviando dados para controller.');
       UserModel userModel = UserModel(
         userName: nameEC.text,
@@ -55,13 +54,11 @@ mixin CreateAccountPageMixin<T extends StatefulWidget> on State<T> {
       Map<String, dynamic> userMap = userModel.toMap();
 
       registerController.changeDataAcountPage(userMap);
-    });
+ 
   }
 
   void _checkDataAccount() {
-    debounce.run(() {
-      log('CHECK-VALID ACCOUNT.: ${registerController.checkValid}');
-      if (registerController.checkValid) _onTextFieldChange();
-    });
+  
+      if (registerController.submitFormAcount()) _onTextFieldChange();
   }
 }

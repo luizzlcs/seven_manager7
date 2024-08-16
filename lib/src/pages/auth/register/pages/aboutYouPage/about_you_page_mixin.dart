@@ -63,9 +63,8 @@ mixin AboutYouPageMixin<T extends StatefulWidget> on State<T> {
   }
 
   void _checkDataAboutYou() {
-    debounce.run(() {
-      log('CHECK-VALID YOU:  ${registerController.checkValid}');
-      if (registerController.checkValid) _onTextFieldChange();
-    });
+    
+      if (registerController.submitFormYou()) _onTextFieldChange();
+    
   }
 }
