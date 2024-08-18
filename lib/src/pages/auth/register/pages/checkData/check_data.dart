@@ -66,6 +66,7 @@ class _CheckDataState extends State<CheckData>
                           const SizedBox(height: 20),
                           const TitleWidget(name: 'SOBRE SEU ACESSO'),
                           FieldsWidgets(
+                            
                               field:
                                   'Nome: ${controller.dataAcountPage['userName']}'),
                           FieldsWidgets(

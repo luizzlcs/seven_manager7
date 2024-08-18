@@ -8,7 +8,7 @@ class FieldsWidgets extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.topLeft,
-      child: Text(field),
+      child: SelectableText(field),
     );
   }
 }
