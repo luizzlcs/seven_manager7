@@ -71,6 +71,28 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
         duration: const Duration(milliseconds: 600), curve: Curves.slowMiddle);
   }
 
+  void _createAccount() {
+    switch (registerController.registerStatus) {
+      case RegisterStatus.initial:
+      log('INITIAL: ${registerController.message}');
+        break;
+      case RegisterStatus.loading:
+        showLoader();
+        log('LOADER: ${registerController.message}');
+        break;
+      case RegisterStatus.success:
+        hideLoader();
+        Messages.showSuccess(registerController.message, context);
+        log('SUCCESS: ${registerController.message}');
+        break;
+      case RegisterStatus.error:
+        hideLoader();
+        Messages.showError(registerController.message, context);
+        log('ERROR: ${registerController.message}');
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -157,8 +179,9 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
                               icon: Icons.folder_open_sharp,
                               function: () {
                                 registerController.createUser();
-                                registerController.createChurchs();
-                                registerController.createPerson();
+                                _createAccount();
+                                // registerController.createChurchs();
+                                // registerController.createPerson();
                               },
                             ),
                           )
@@ -167,7 +190,7 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
                       const SizedBox(height: 10),
                       SmoothPageIndicator(
                         controller: _controller,
-                        count: 3,
+                        count: 4,
                         effect: const ExpandingDotsEffect(
                           activeDotColor: SevenManagerTheme.tealBlue,
                           dotColor: Color.fromARGB(255, 117, 188, 230),
