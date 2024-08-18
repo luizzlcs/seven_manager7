@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:seven_manager/src/core/services/firebase/auth_service_firebase_impl.dart';
@@ -77,8 +78,6 @@ class RegisterController with ChangeNotifier {
   void changeDataAcountPage(Map<String, dynamic> data) {
     dataAcountPage.addAll(data);
     log('DADOS ACCOUNT: $dataAcountPage');
-
-    // notifyListeners();
   }
 
   void changeDataAboutYouPage(Map<String, dynamic> data) {
@@ -92,52 +91,56 @@ class RegisterController with ChangeNotifier {
   }
 
   Future<void> createUser() async {
-    registerStatus = RegisterStatus.loading;
-
-    notifyListeners();
-
-    var auth = await firebaseAuth.createUser(
-      namePerson: dataAcountPage['userName'],
-      emailPerson: dataAcountPage['userEmail'],
-      password: dataAcountPage['userPassword'],
-    );
-
-    if (auth == null) {
-      message = 'Você logu pela 1ª vez com ${dataAcountPage['userEmail']}';
-      notifyListeners();
-      registerStatus = RegisterStatus.success;
-      notifyListeners();
-    } else {
-      message = auth;
-      registerStatus = RegisterStatus.error;
-      notifyListeners();
-    }
-  }
-
-  Future<void> createChurchs() async {
-    await firebaseAuth.createChurchs(
-      districtChuchs: dataChurchPage['districtChuchs'],
-      cityChuchs: dataChurchPage['cityChuchs'],
-      zipCodeChuchs: dataChurchPage['zipCodeChuchs'],
-      streetChuchs: dataChurchPage['streetChuchs'],
-      stateChuchs: dataChurchPage['stateChuchs'],
-    );
-  }
-
-  Future<void> createPerson() async {
-    await firebaseAuth.createPersons(
-      namePerson: dataAboutYouPage['namePerson'],
-      emailPerson: dataAboutYouPage['emailPerson'],
-      dateOfBirthPerson: dataAboutYouPage['dateOfBirthPerson'],
-      cpf: dataAboutYouPage['cpf'],
-      malePerson: sexOption,
-      whastAppPerson: dataAboutYouPage['whastAppPerson'],
-      numberPerson: dataAboutYouPage['numberPerson'],
-      cityPerson: dataAboutYouPage['cityPerson'],
-      zipCodePerson: dataAboutYouPage['zipCodePerson'],
-      statePerson: dataAboutYouPage['statePerson'],
-      streetPerson: dataAboutYouPage['streetPerson'],
-      isPostalServicePerson: dataAboutYouPage['isPostalServicePerson'],
-    );
+    
+      String? userId = await firebaseAuth.createUser(
+        namePerson: dataAcountPage['userName'],
+        emailPerson: dataAcountPage['userEmail'],
+        password: dataAcountPage['userPassword'],
+        districtChuchs: dataChurchPage['districtChuchs'],
+        cityChuchs: dataChurchPage['cityChuchs'],
+        zipCodeChuchs: dataChurchPage['zipCodeChuchs'],
+        streetChuchs: dataChurchPage['streetChuchs'],
+        stateChuchs: dataChurchPage['stateChuchs'],
+        dateOfBirthPerson: dataAboutYouPage['dateOfBirthPerson'],
+        cpf: dataAboutYouPage['cpf'],
+        malePerson: sexOption,
+        whastAppPerson: dataAboutYouPage['whastAppPerson'],
+        numberPerson: dataAboutYouPage['numberPerson'],
+        cityPerson: dataAboutYouPage['cityPerson'],
+        zipCodePerson: dataAboutYouPage['zipCodePerson'],
+        statePerson: dataAboutYouPage['statePerson'],
+        streetPerson: dataAboutYouPage['streetPerson'],
+        isPostalServicePerson: dataAboutYouPage['isPostalServicePerson'],
+      );
+      log('>>> ERRO AO CRIAR USUÁRIO: $userId');
+    
   }
 }
+
+  // Future<void> createChurchs() async {
+  //   await firebaseAuth.createChurchs(
+  //     districtChuchs: dataChurchPage['districtChuchs'],
+  //     cityChuchs: dataChurchPage['cityChuchs'],
+  //     zipCodeChuchs: dataChurchPage['zipCodeChuchs'],
+  //     streetChuchs: dataChurchPage['streetChuchs'],
+  //     stateChuchs: dataChurchPage['stateChuchs'],
+  //   );
+  // }
+
+  // Future<void> createPerson() async {
+  //   await firebaseAuth.createPersons(
+  //     namePerson: dataAboutYouPage['namePerson'],
+  //     emailPerson: dataAboutYouPage['emailPerson'],
+  //     dateOfBirthPerson: dataAboutYouPage['dateOfBirthPerson'],
+  //     cpf: dataAboutYouPage['cpf'],
+  //     malePerson: sexOption,
+  //     whastAppPerson: dataAboutYouPage['whastAppPerson'],
+  //     numberPerson: dataAboutYouPage['numberPerson'],
+  //     cityPerson: dataAboutYouPage['cityPerson'],
+  //     zipCodePerson: dataAboutYouPage['zipCodePerson'],
+  //     statePerson: dataAboutYouPage['statePerson'],
+  //     streetPerson: dataAboutYouPage['streetPerson'],
+  //     isPostalServicePerson: dataAboutYouPage['isPostalServicePerson'],
+  //   );
+  // }
+
