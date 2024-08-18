@@ -42,6 +42,7 @@ mixin AboutYouChurchPageMixin<T extends StatefulWidget> on State<T> {
       zipCodeChuchs: zipCodeChuchsEC.text,
       streetChuchs: streetChuchsEC.text,
       stateChuchs: stateChuchsEC.text,
+      creationDate: DateTime.now().toIso8601String()
     );
     Map<String, dynamic> churchMap = churchModel.toMap();
 
