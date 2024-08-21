@@ -1,14 +1,17 @@
 import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:seven_manager/src/core/injection/injection.dart';
 import 'package:seven_manager/src/core/widgets/helpers/debounce.dart';
+import 'package:seven_manager/src/core/widgets/imageAvatar/image_profile_controller.dart';
 import 'package:seven_manager/src/model/persons_model.dart';
+import 'package:seven_manager/src/pages/auth/register/cep_controller.dart';
 import 'package:seven_manager/src/pages/auth/register/register_controller.dart';
 
 mixin AboutYouPageMixin<T extends StatefulWidget> on State<T> {
   final TextEditingController malePersonEC = TextEditingController();
   final TextEditingController cpfEC = TextEditingController();
-  final TextEditingController dateOfBirthPersonEC = TextEditingController();
+  final TextEditingController birthEC = TextEditingController();
   final TextEditingController whastAppPersonEC = TextEditingController();
   final TextEditingController zipCodePersonEC = TextEditingController();
   final TextEditingController streetPersonEC = TextEditingController();
@@ -17,7 +20,21 @@ mixin AboutYouPageMixin<T extends StatefulWidget> on State<T> {
   final TextEditingController cityPersonEC = TextEditingController();
   final TextEditingController statePersonEC = TextEditingController();
 
+  final FocusNode malePersonFocus = FocusNode();
+  final FocusNode cpfFocus = FocusNode();
+  final FocusNode birthFocus = FocusNode();
+  final FocusNode whastAppPersonFocus = FocusNode();
+  final FocusNode zipCodePersonFocus = FocusNode();
+  final FocusNode streetPersonFocus = FocusNode();
+  final FocusNode numberPersonFocus = FocusNode();
+  final FocusNode complementPersonFocus = FocusNode();
+  final FocusNode cityPersonFocus = FocusNode();
+  final FocusNode statePersonFocus = FocusNode();
+  final FocusNode confimAddresFocus = FocusNode();
+
   final RegisterController registerController = getIt();
+  final ImageProfileController imageProfileController = getIt();
+  final CepController cepController = getIt();
 
   final debounce = Debounce();
 
@@ -31,7 +48,7 @@ mixin AboutYouPageMixin<T extends StatefulWidget> on State<T> {
   void dispose() {
     malePersonEC.dispose();
     cpfEC.dispose();
-    dateOfBirthPersonEC.dispose();
+    birthEC.dispose();
     whastAppPersonEC.dispose();
     zipCodePersonEC.dispose();
     streetPersonEC.dispose();
@@ -43,11 +60,14 @@ mixin AboutYouPageMixin<T extends StatefulWidget> on State<T> {
   }
 
   void _onTextFieldChange() {
+    log('IMAGE AVATAR: ${imageProfileController.urlImage}');
     log('ABOUT YOU: Enviando dados para controller.');
     PersonsModel personModel = PersonsModel(
       malePerson: malePersonEC.text,
+      namePerson: registerController.dataAcountPage['userName'],
+      imageAvatar: imageProfileController.urlImage,
       cpf: cpfEC.text,
-      dateOfBirthPerson: dateOfBirthPersonEC.text,
+      birth: birthEC.text,
       whastAppPerson: whastAppPersonEC.text,
       zipCodePerson: zipCodePersonEC.text,
       streetPerson: streetPersonEC.text,
@@ -60,11 +80,12 @@ mixin AboutYouPageMixin<T extends StatefulWidget> on State<T> {
     Map<String, dynamic> personMap = personModel.toMap();
 
     registerController.changeDataAboutYouPage(personMap);
+    // imageProfileController.clearUrl();
   }
 
+  
+
   void _checkDataAboutYou() {
-    
-      if (registerController.submitFormYou()) _onTextFieldChange();
-    
+    if (registerController.submitFormYou()) _onTextFieldChange();
   }
 }

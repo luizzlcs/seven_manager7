@@ -17,8 +17,6 @@ class AboutYouChurchPage extends StatefulWidget {
 
 class _AboutYouChurchPageState extends State<AboutYouChurchPage>
     with AutomaticKeepAliveClientMixin, AboutYouChurchPageMixin {
-  
-
   @override
   bool get wantKeepAlive => true;
 
@@ -63,7 +61,13 @@ class _AboutYouChurchPageState extends State<AboutYouChurchPage>
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: zipCodeChuchsEC,
+                        autofocus: true,
                         keyboardType: TextInputType.number,
+                        onFieldSubmitted: (_) async {
+                          FocusScope.of(context)
+                              .requestFocus(streetChurchsFocus);
+                        },
+                        textInputAction: TextInputAction.next,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                           CepInputFormatter()
@@ -81,6 +85,12 @@ class _AboutYouChurchPageState extends State<AboutYouChurchPage>
                       const SizedBox(height: 20),
                       TextFormField(
                         controller: streetChuchsEC,
+                        focusNode: streetChurchsFocus,
+                        onFieldSubmitted: (_) async {
+                          FocusScope.of(context)
+                              .requestFocus(districtChurchsFocus);
+                        },
+                        textInputAction: TextInputAction.next,
                         validator: Validatorless.required('Logradouro'),
                         decoration: const InputDecoration(
                           label: Text('Logradouro'),
@@ -95,6 +105,11 @@ class _AboutYouChurchPageState extends State<AboutYouChurchPage>
                       const SizedBox(height: 20),
                       TextFormField(
                         controller: districtChuchsEC,
+                        focusNode: districtChurchsFocus,
+                        onFieldSubmitted: (_) async {
+                          FocusScope.of(context).requestFocus(cityChurchsFocus);
+                        },
+                        textInputAction: TextInputAction.next,
                         validator: Validatorless.required('Bairro da igreja'),
                         decoration: const InputDecoration(
                           label: Text('Bairro'),
@@ -109,6 +124,12 @@ class _AboutYouChurchPageState extends State<AboutYouChurchPage>
                       TextFormField(
                         controller: cityChuchsEC,
                         validator: Validatorless.required('Cidade'),
+                        focusNode: cityChurchsFocus,
+                        onFieldSubmitted: (_) async {
+                          FocusScope.of(context)
+                              .requestFocus(stateChurchsFocus);
+                        },
+                        textInputAction: TextInputAction.next,
                         decoration: const InputDecoration(
                           label: Text('Cidade'),
                           prefixIcon: Icon(
@@ -121,6 +142,8 @@ class _AboutYouChurchPageState extends State<AboutYouChurchPage>
                       const SizedBox(height: 20),
                       TextFormField(
                         controller: stateChuchsEC,
+                        focusNode: stateChurchsFocus,
+                        textInputAction: TextInputAction.done,
                         validator: Validatorless.required('Estado'),
                         decoration: const InputDecoration(
                           label: Text('Estado'),

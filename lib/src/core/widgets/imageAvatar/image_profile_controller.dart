@@ -12,41 +12,65 @@ class ImageProfileController with ChangeNotifier {
 
   final FirebaseStorageService storage;
 
-
   File? _imageFile;
+  
+
   String? urlImage;
   String message = '';
 
   File? get imageFile => _imageFile;
 
-  void clear() {
+  void clearUrl() {
+    urlImage = null;
+    notifyListeners();
+  }
+
+  void clearFile() {
     _imageFile = null;
     notifyListeners();
+  }
+
+  void clearImageUrlFile() async {
+    notifyListeners();
+
+    try {
+      // Verifica se o arquivo existe
+      if (urlImage != null) {
+        storage.deleteImage(urlImage!);
+        if (_imageFile != null) {
+          _imageFile = null;
+          message = '';
+        }
+      }
+    } catch (e) {
+      if (e is FirebaseException && e.code == 'object-not-found') {
+        log('Erro: O objeto não existe na referência desejada.');
+      } else {
+        log('Erro desconhecido: $e');
+      }
+    }
   }
 
   void pickEditAndUploadImage(ImageSource source) async {
     final imagePicker = ImagePicker();
     final pickedFile = await imagePicker.pickImage(source: source);
-   
-    // Deletando imagem do Storage    
-    if(urlImage != null){
+
+    // Deletando imagem do Storage
+    if (urlImage != null) {
       storage.deleteImage(urlImage!);
     }
-    
-    
+
     if (pickedFile != null) {
       _imageFile = File(pickedFile.path);
       message = '';
-
-      
 
       notifyListeners();
 
       try {
         // Crie uma referência única para o arquivo
         DateTime now = DateTime.now();
-        String formattedDate =  UtilData.obterDataDDMMAAAA(now);
-        String formattedDateRemove = formattedDate.replaceAll('/','');
+        String formattedDate = UtilData.obterDataDDMMAAAA(now);
+        String formattedDateRemove = formattedDate.replaceAll('/', '');
         String formattedTime = UtilData.obterHoraHHMMSS(now);
         String fileName = '$formattedDateRemove-$formattedTime';
         Reference ref =

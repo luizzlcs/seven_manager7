@@ -12,9 +12,16 @@ mixin AboutYouChurchPageMixin<T extends StatefulWidget> on State<T> {
   final TextEditingController cityChuchsEC = TextEditingController();
   final TextEditingController stateChuchsEC = TextEditingController();
 
+  final FocusNode zipCodeChuchsFocus = FocusNode();
+  final FocusNode streetChurchsFocus = FocusNode();
+  final FocusNode districtChurchsFocus = FocusNode();
+  final FocusNode cityChurchsFocus = FocusNode();
+  final FocusNode stateChurchsFocus = FocusNode();
+
   final debouce = Debounce();
 
   final RegisterController registerController = getIt();
+ 
 
   @override
   void initState() {

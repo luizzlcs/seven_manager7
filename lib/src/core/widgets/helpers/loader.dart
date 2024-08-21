@@ -14,6 +14,7 @@ mixin Loader<T extends StatefulWidget> on State<T> {
         builder: (context) {
           return LoadingAnimationWidget.inkDrop(
             color: SevenManagerTheme.tealBlue,
+            
             size: 90,
           );
         },

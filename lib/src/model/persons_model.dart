@@ -4,9 +4,10 @@ class PersonsModel {
   const PersonsModel({
     this.idChurch,
     this.namePerson,
+    this.imageAvatar,
     this.emailPerson,
     required this.malePerson,
-    required this.dateOfBirthPerson,
+    required this.birth,
     required this.cpf,
     required this.whastAppPerson,
     required this.streetPerson,
@@ -19,9 +20,10 @@ class PersonsModel {
   });
   final String? idChurch;
   final String? namePerson;
+  final String? imageAvatar;
   final String? emailPerson;
   final String malePerson;
-  final String dateOfBirthPerson;
+  final String birth;
   final String cpf;
   final String whastAppPerson;
   final String zipCodePerson;
@@ -36,7 +38,9 @@ class PersonsModel {
     return {
       'idChurch': idChurch,
       'malePerson': malePerson,
-      'dateOfBirthPerson': dateOfBirthPerson,
+      'namePerson': namePerson,
+      'imageAvatar': imageAvatar,
+      'birth': birth,
       'cpf': cpf,
       'whastAppPerson': whastAppPerson,
       'zipCodePerson': zipCodePerson,
@@ -53,7 +57,9 @@ class PersonsModel {
     return PersonsModel(
       idChurch: map['idChurch'] ?? '',
       malePerson: map['malePerson'] ?? '',
-      dateOfBirthPerson: map['dateOfBirthPerson'] ?? '',
+      namePerson: map['namePerson'] ?? '',
+      imageAvatar: map['imageAvatar'] ?? '',
+      birth: map['birth'] ?? '',
       cpf: map['cpf'] ?? '',
       whastAppPerson: map['whastAppPerson'] ?? '',
       zipCodePerson: map['zipCodePerson'] ?? '',

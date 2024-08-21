@@ -15,104 +15,115 @@ class AuthServiceFirebaseImpl {
   final CloudFirestore _cloudFirestore = CloudFirestore('churchs');
 
   Future<String?> createUser({
-  required String namePerson,
-  required String dateOfBirthPerson,
-  required String cpf,
-  required String malePerson,
-  required String whastAppPerson,
-  required String numberPerson,
-  required String cityPerson,
-  required String zipCodePerson,
-  required String statePerson,
-  required String streetPerson,
-  required bool isPostalServicePerson,
-  String? photoURL,
-  required String emailPerson,
-  required String password,
-  required String districtChuchs,
-  required String cityChuchs,
-  required String zipCodeChuchs,
-  required String streetChuchs,
-  required String stateChuchs,
-}) async {
-  try {
-    // Cria o usuário no Firebase Authentication
-    UserCredential userCredential = await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(email: emailPerson, password: password);
-    String userId = userCredential.user!.uid;
+    required String namePerson,
+    required String birth,
+    required String cpf,
+    required String malePerson,
+    required String whastAppPerson,
+    required String numberPerson,
+    required String cityPerson,
+    required String zipCodePerson,
+    required String statePerson,
+    required String streetPerson,
+    required bool isPostalServicePerson,
+    String? imageAvatar,
+    required String emailPerson,
+    required String password,
+    required String districtChuchs,
+    required String cityChuchs,
+    required String zipCodeChuchs,
+    required String streetChuchs,
+    required String stateChuchs,
+  }) async {
+    try {
+      // Cria o usuário no Firebase Authentication
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: emailPerson, password: password);
+      String userId = userCredential.user!.uid;
 
-    // Função auxiliar para criar a igreja se necessário
-    Future<String?> createChurch() async {
-      // Verifica se a igreja já existe
-      QuerySnapshot querySnapshot = await _cloudFirestore.getByField(
-          fieldName: districtChuchs, value: districtChuchs);
+      // Função auxiliar para criar a igreja se necessário
+      Future<String?> createChurch() async {
+        // Verifica se a igreja já existe
+        QuerySnapshot querySnapshot = await _cloudFirestore.getByField(
+            fieldName: districtChuchs, value: districtChuchs);
 
-      if (querySnapshot.docs.isNotEmpty) {
-        return querySnapshot.docs.first.id;
+        if (querySnapshot.docs.isNotEmpty) {
+          return querySnapshot.docs.first.id;
+        }
+
+        // Cria a igreja
+        final newChurch = ChurchsModel(
+          districtChuchs: districtChuchs,
+          cityChuchs: cityChuchs,
+          zipCodeChuchs: zipCodeChuchs,
+          streetChuchs: streetChuchs,
+          stateChuchs: stateChuchs,
+        );
+        DocumentReference docRef =
+            await _cloudFirestore.create(data: newChurch.toMap());
+        return docRef.id;
       }
 
-      // Cria a igreja
-      final newChurch = ChurchsModel(
-        districtChuchs: districtChuchs,
-        cityChuchs: cityChuchs,
-        zipCodeChuchs: zipCodeChuchs,
-        streetChuchs: streetChuchs,
-        stateChuchs: stateChuchs,
+      // Tenta criar a igreja e obtém o ID
+      String? churchId;
+      try {
+        churchId = await createChurch();
+      } on FirebaseException catch (e) {
+        // Erro ao criar a igreja
+        await userCredential.user!.delete();
+        return 'Erro ao criar a igreja: ${e.message}';
+      }
+
+      if (churchId == null) {
+        // Igreja não criada, mas usuário criado sem problemas, retorna null
+        return userId;
+      }
+
+      // Cria o usuário na coleção "persons"
+      final newPerson = PersonsModel(
+        idChurch: churchId,
+        malePerson: malePerson,
+        namePerson: namePerson,
+        imageAvatar: imageAvatar,
+        birth: birth,
+        cpf: cpf,
+        emailPerson: emailPerson,
+        whastAppPerson: whastAppPerson,
+        zipCodePerson: zipCodePerson,
+        numberPerson: numberPerson,
+        cityPerson: cityPerson,
+        statePerson: statePerson,
+        isPostalServicePerson: isPostalServicePerson,
+        streetPerson: streetPerson,
       );
-      DocumentReference docRef =
-          await _cloudFirestore.create(data: newChurch.toMap());
-      return docRef.id;
-    }
+      try {
+        await _cloudFirestore.createDocumentWithSpecificId(
+            'persons', userId, newPerson.toMap());
+      } on FirebaseException catch (e) {
+        // Erro ao criar a pessoa
+        await userCredential.user!.delete();
+        return 'Erro ao criar a pessoa: ${e.message}';
+      }
 
-    // Tenta criar a igreja e obtém o ID
-    String? churchId;
-    try {
-      churchId = await createChurch();
-    } on FirebaseException catch (e) {
-      // Erro ao criar a igreja
-      await userCredential.user!.delete();
-      return 'Erro ao criar a igreja: ${e.message}';
-    }
+      return null;
+    } on FirebaseAuthException catch (e) {
+      Map<String, dynamic> errorMenssages = {
+        'invalid-email': 'E-mail inválido',
+        'user-disabled': 'Esse usuário foi desabilitado',
+        'user-not-found': 'Usuário não encontrado',
+        'email-already-in-use': 'Já existe uma conta com este e-mail'
+      };
 
-    if (churchId == null) {
-      // Igreja não criada, mas usuário criado sem problemas, retorna null
-      return userId;
-    }
+      final errorMenssage = errorMenssages[e.code];
 
-    // Cria o usuário na coleção "persons"
-    final newPerson = PersonsModel(
-      idChurch: churchId,
-      malePerson: malePerson,
-      namePerson: namePerson,
-      dateOfBirthPerson: dateOfBirthPerson,
-      cpf: cpf,
-      emailPerson: emailPerson,
-      whastAppPerson: whastAppPerson,
-      zipCodePerson: zipCodePerson,
-      numberPerson: numberPerson,
-      cityPerson: cityPerson,
-      statePerson: statePerson,
-      isPostalServicePerson: isPostalServicePerson,
-      streetPerson: streetPerson,
-    );
-    try {
-      await _cloudFirestore.createDocumentWithSpecificId(
-          'persons', userId, newPerson.toMap());
-    } on FirebaseException catch (e) {
-      // Erro ao criar a pessoa
-      await userCredential.user!.delete();
-      return 'Erro ao criar a pessoa: ${e.message}';
+      // Erro ao criar o usuário (provavelmente erro de autenticação)
+      return 'Erro ao criar usuário: ${errorMenssage ?? 'Erro não identificado'}';
+    } catch (e) {
+      // Outros erros
+      return 'Erro desconhecido: $e';
     }
-
-    return userId;
-  } on FirebaseAuthException catch (e) {
-    // Erro ao criar o usuário (provavelmente erro de autenticação)
-    return 'Erro ao criar usuário: ${e.code}';
-  } catch (e) {
-    // Outros erros
-    return 'Erro desconhecido: $e';
   }
-}
 
   // Método para registrar usuário com email e senha
   Future<String?> signInWithEmail(

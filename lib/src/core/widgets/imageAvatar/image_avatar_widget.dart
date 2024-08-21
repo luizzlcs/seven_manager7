@@ -17,7 +17,7 @@ class ImageAvatarWidget extends StatefulWidget {
   State<ImageAvatarWidget> createState() => _ImageAvatarWidgetState();
 }
 
-class _ImageAvatarWidgetState extends State<ImageAvatarWidget> {
+class _ImageAvatarWidgetState extends State<ImageAvatarWidget> with AutomaticKeepAliveClientMixin {
   final ImageProfileController _imageController = getIt();
   final FirebaseStorageService _storage = getIt();
 
@@ -34,7 +34,12 @@ class _ImageAvatarWidgetState extends State<ImageAvatarWidget> {
   }
 
   @override
+
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     void showBottomSheet() {
       showModalBottomSheet(
         constraints: const BoxConstraints(maxWidth: 390),
@@ -52,7 +57,7 @@ class _ImageAvatarWidgetState extends State<ImageAvatarWidget> {
             },
             onRemoveTap: () {
               Navigator.of(context).pop();
-              _imageController.clear();
+              _imageController.clearFile();
               if (_imageController.urlImage != null) {
                 _storage.deleteImage(_imageController.urlImage!);
               }
@@ -103,4 +108,6 @@ class _ImageAvatarWidgetState extends State<ImageAvatarWidget> {
       ],
     );
   }
+  
+  
 }

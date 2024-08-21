@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +17,11 @@ class AboutYouPage extends StatefulWidget {
 
 class _AboutYouPageState extends State<AboutYouPage>
     with AutomaticKeepAliveClientMixin, AboutYouPageMixin {
+  fetchCep() {
+    cepController.buscarCep('59520000');
+    statePersonEC.text = cepController.cepModel.logradouro;
+  }
+
   @override
   bool get wantKeepAlive => true;
 
@@ -72,6 +79,7 @@ class _AboutYouPageState extends State<AboutYouPage>
                           return Row(
                             children: [
                               RadioMenuButton<String>(
+                                focusNode: malePersonFocus,
                                 value: 'Masculino',
                                 groupValue: registerController.sexOption,
                                 onChanged: (String? value) {
@@ -94,6 +102,11 @@ class _AboutYouPageState extends State<AboutYouPage>
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: cpfEC,
+                        focusNode: cpfFocus,
+                        onFieldSubmitted: (_) async {
+                          FocusScope.of(context).requestFocus(birthFocus);
+                        },
+                        textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
@@ -114,7 +127,13 @@ class _AboutYouPageState extends State<AboutYouPage>
                       ),
                       const SizedBox(height: 20),
                       TextFormField(
-                        controller: dateOfBirthPersonEC,
+                        controller: birthEC,
+                        focusNode: birthFocus,
+                        onFieldSubmitted: (_) async {
+                          FocusScope.of(context)
+                              .requestFocus(whastAppPersonFocus);
+                        },
+                        textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.datetime,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
@@ -122,7 +141,6 @@ class _AboutYouPageState extends State<AboutYouPage>
                         ],
                         validator: validateDate,
                         decoration: const InputDecoration(
-                          
                           label: Text('Data de nascimento'),
                           hintText: 'Data de nascimento Ex.: 22/04/2010',
                           prefixIcon: Icon(
@@ -138,6 +156,12 @@ class _AboutYouPageState extends State<AboutYouPage>
                         builder: (context, child) {
                           return TextFormField(
                             controller: whastAppPersonEC,
+                            focusNode: whastAppPersonFocus,
+                            onFieldSubmitted: (_) async {
+                              FocusScope.of(context)
+                                  .requestFocus(zipCodePersonFocus);
+                            },
+                            textInputAction: TextInputAction.next,
                             keyboardType: TextInputType.phone,
                             validator:
                                 Validatorless.required('Campo obrigatório'),
@@ -163,21 +187,47 @@ class _AboutYouPageState extends State<AboutYouPage>
                         builder: (context, child) {
                           return TextFormField(
                             controller: zipCodePersonEC,
+                            focusNode: zipCodePersonFocus,
+                            onFieldSubmitted: (_) async {
+                              FocusScope.of(context)
+                                  .requestFocus(streetPersonFocus);
+                            },
+                            textInputAction: TextInputAction.next,
                             keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              label: Text('Cep'),
-                              prefixIcon: Icon(
-                                Icons.pin,
-                                color: SevenManagerTheme.tealBlue,
-                                size: 28,
-                              ),
-                            ),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              CepInputFormatter()
+                            ],
+                            decoration: InputDecoration(
+                                label: const Text('Cep'),
+                                prefixIcon: const Icon(
+                                  Icons.pin,
+                                  color: SevenManagerTheme.tealBlue,
+                                  size: 28,
+                                ),
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    
+                                      fetchCep();
+                                      streetPersonEC.text = cepController.cepModel.logradouro;
+                                      log('FETCH-CEP: ${streetPersonEC.text}');
+                                   
+                                  },
+                                  icon: const Icon(
+                                      Icons.radio_button_checked_sharp),
+                                )),
                           );
                         },
                       ),
                       const SizedBox(height: 20),
                       TextFormField(
                         controller: streetPersonEC,
+                        focusNode: streetPersonFocus,
+                        onFieldSubmitted: (_) async {
+                          FocusScope.of(context)
+                              .requestFocus(numberPersonFocus);
+                        },
+                        textInputAction: TextInputAction.next,
                         decoration: const InputDecoration(
                           label: Text('Logradouro'),
                           hintText: 'Rua, aveninda, travessa...',
@@ -193,9 +243,15 @@ class _AboutYouPageState extends State<AboutYouPage>
                         Flexible(
                           child: TextFormField(
                             controller: numberPersonEC,
+                            focusNode: numberPersonFocus,
+                            onFieldSubmitted: (_) async {
+                              FocusScope.of(context)
+                                  .requestFocus(complementPersonFocus);
+                            },
+                            textInputAction: TextInputAction.next,
                             decoration: const InputDecoration(
                               label: Text('Número'),
-                              hintText: 'Rua, aveninda, travessa...',
+                              hintText: '88',
                               prefixIcon: Icon(
                                 Icons.looks_3,
                                 color: SevenManagerTheme.tealBlue,
@@ -208,6 +264,12 @@ class _AboutYouPageState extends State<AboutYouPage>
                         Flexible(
                           child: TextFormField(
                             controller: complementPersonEC,
+                            focusNode: complementPersonFocus,
+                            onFieldSubmitted: (_) async {
+                              FocusScope.of(context)
+                                  .requestFocus(cityPersonFocus);
+                            },
+                            textInputAction: TextInputAction.next,
                             decoration: const InputDecoration(
                               label: Text('Complemento'),
                               prefixIcon: Icon(
@@ -224,6 +286,12 @@ class _AboutYouPageState extends State<AboutYouPage>
                         Flexible(
                           child: TextFormField(
                             controller: cityPersonEC,
+                            focusNode: cityPersonFocus,
+                            onFieldSubmitted: (_) async {
+                              FocusScope.of(context)
+                                  .requestFocus(statePersonFocus);
+                            },
+                            textInputAction: TextInputAction.next,
                             decoration: const InputDecoration(
                               label: Text('Cidade'),
                               prefixIcon: Icon(
@@ -238,6 +306,12 @@ class _AboutYouPageState extends State<AboutYouPage>
                         Flexible(
                           child: TextFormField(
                             controller: statePersonEC,
+                            focusNode: statePersonFocus,
+                            onFieldSubmitted: (_) async {
+                              FocusScope.of(context)
+                                  .requestFocus(confimAddresFocus);
+                            },
+                            textInputAction: TextInputAction.next,
                             decoration: const InputDecoration(
                               label: Text('Estado'),
                               prefixIcon: Icon(
@@ -303,6 +377,11 @@ class _AboutYouPageState extends State<AboutYouPage>
             ),
           ),
         ),
+        ElevatedButton(
+            onPressed: () {
+              cepController.buscarCep('59129490');
+            },
+            child: const Text('Buscar CEP'))
       ],
     );
   }

@@ -24,7 +24,6 @@ class LoginController with ChangeNotifier {
         await firebaseAuth.signInWithEmail(email: email, password: password);
 
     if (auth == null) {
-      notifyListeners();
       loginStatus = LoginStatus.success;
       notifyListeners();
     } else {

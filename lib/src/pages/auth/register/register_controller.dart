@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:seven_manager/src/core/services/firebase/auth_service_firebase_impl.dart';
@@ -91,56 +90,48 @@ class RegisterController with ChangeNotifier {
   }
 
   Future<void> createUser() async {
-    
-      String? userId = await firebaseAuth.createUser(
-        namePerson: dataAcountPage['userName'],
-        emailPerson: dataAcountPage['userEmail'],
-        password: dataAcountPage['userPassword'],
-        districtChuchs: dataChurchPage['districtChuchs'],
-        cityChuchs: dataChurchPage['cityChuchs'],
-        zipCodeChuchs: dataChurchPage['zipCodeChuchs'],
-        streetChuchs: dataChurchPage['streetChuchs'],
-        stateChuchs: dataChurchPage['stateChuchs'],
-        dateOfBirthPerson: dataAboutYouPage['dateOfBirthPerson'],
-        cpf: dataAboutYouPage['cpf'],
-        malePerson: sexOption,
-        whastAppPerson: dataAboutYouPage['whastAppPerson'],
-        numberPerson: dataAboutYouPage['numberPerson'],
-        cityPerson: dataAboutYouPage['cityPerson'],
-        zipCodePerson: dataAboutYouPage['zipCodePerson'],
-        statePerson: dataAboutYouPage['statePerson'],
-        streetPerson: dataAboutYouPage['streetPerson'],
-        isPostalServicePerson: dataAboutYouPage['isPostalServicePerson'],
-      );
-      log('>>> ERRO AO CRIAR USUÁRIO: $userId');
-    
+    registerStatus = RegisterStatus.loading;
+    notifyListeners();
+
+    String? userId = await firebaseAuth.createUser(
+      namePerson: dataAcountPage['userName'],
+      imageAvatar: dataAboutYouPage['imageAvatar'],
+      emailPerson: dataAcountPage['userEmail'],
+      password: dataAcountPage['userPassword'],
+      districtChuchs: dataChurchPage['districtChuchs'],
+      cityChuchs: dataChurchPage['cityChuchs'],
+      zipCodeChuchs: dataChurchPage['zipCodeChuchs'],
+      streetChuchs: dataChurchPage['streetChuchs'],
+      stateChuchs: dataChurchPage['stateChuchs'],
+      birth: dataAboutYouPage['birth'],
+      cpf: dataAboutYouPage['cpf'],
+      malePerson: sexOption,
+      whastAppPerson: dataAboutYouPage['whastAppPerson'],
+      numberPerson: dataAboutYouPage['numberPerson'],
+      cityPerson: dataAboutYouPage['cityPerson'],
+      zipCodePerson: dataAboutYouPage['zipCodePerson'],
+      statePerson: dataAboutYouPage['statePerson'],
+      streetPerson: dataAboutYouPage['streetPerson'],
+      isPostalServicePerson: dataAboutYouPage['isPostalServicePerson'],
+    );
+    log('>>> ERRO AO CRIAR USUÁRIO: $userId');
+    if (userId != null) {
+      message = userId;
+      registerStatus = RegisterStatus.error;
+      notifyListeners();
+      registerStatus = RegisterStatus.initial;
+      userId = null;
+      message = 'userId';
+      notifyListeners();
+    }else{
+      registerStatus = RegisterStatus.success;
+      message = 'Usuário: ${dataAcountPage['userEmail']} criado com sucesso!';
+      notifyListeners();
+      message = '';
+      registerStatus = RegisterStatus.initial;
+      notifyListeners();
+
+
+    }
   }
 }
-
-  // Future<void> createChurchs() async {
-  //   await firebaseAuth.createChurchs(
-  //     districtChuchs: dataChurchPage['districtChuchs'],
-  //     cityChuchs: dataChurchPage['cityChuchs'],
-  //     zipCodeChuchs: dataChurchPage['zipCodeChuchs'],
-  //     streetChuchs: dataChurchPage['streetChuchs'],
-  //     stateChuchs: dataChurchPage['stateChuchs'],
-  //   );
-  // }
-
-  // Future<void> createPerson() async {
-  //   await firebaseAuth.createPersons(
-  //     namePerson: dataAboutYouPage['namePerson'],
-  //     emailPerson: dataAboutYouPage['emailPerson'],
-  //     dateOfBirthPerson: dataAboutYouPage['dateOfBirthPerson'],
-  //     cpf: dataAboutYouPage['cpf'],
-  //     malePerson: sexOption,
-  //     whastAppPerson: dataAboutYouPage['whastAppPerson'],
-  //     numberPerson: dataAboutYouPage['numberPerson'],
-  //     cityPerson: dataAboutYouPage['cityPerson'],
-  //     zipCodePerson: dataAboutYouPage['zipCodePerson'],
-  //     statePerson: dataAboutYouPage['statePerson'],
-  //     streetPerson: dataAboutYouPage['streetPerson'],
-  //     isPostalServicePerson: dataAboutYouPage['isPostalServicePerson'],
-  //   );
-  // }
-

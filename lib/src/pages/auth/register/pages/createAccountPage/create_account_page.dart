@@ -19,9 +19,6 @@ class _CreateAccountPageState extends State<CreateAccountPage>
   @override
   bool get wantKeepAlive => true;
 
-  
-  
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -78,6 +75,11 @@ class _CreateAccountPageState extends State<CreateAccountPage>
                       const SizedBox(height: 10),
                       TextFormField(
                         controller: nameEC,
+                        focusNode: nameFocus,
+                        onFieldSubmitted: (_) async {
+                          FocusScope.of(context).requestFocus(emailFocus);
+                        },
+                        textInputAction: TextInputAction.next,
                         validator: Validatorless.required(
                             'O nome do usuário é necessário'),
                         decoration: const InputDecoration(
@@ -92,6 +94,11 @@ class _CreateAccountPageState extends State<CreateAccountPage>
                       const SizedBox(height: 20),
                       TextFormField(
                         controller: emailEC,
+                        focusNode: emailFocus,
+                        onFieldSubmitted: (_) async {
+                          FocusScope.of(context).requestFocus(passwordFocus);
+                        },
+                        textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.emailAddress,
                         validator: Validatorless.multiple([
                           Validatorless.required(
@@ -114,6 +121,12 @@ class _CreateAccountPageState extends State<CreateAccountPage>
                           return TextFormField(
                             obscureText: !registerController.isVisible,
                             controller: passwordEC,
+                            focusNode: passwordFocus,                            
+                            onFieldSubmitted: (_) async {
+                              FocusScope.of(context)
+                                  .requestFocus(confirmePasswordFocus);
+                            },
+                            textInputAction: TextInputAction.next,
                             validator: Validatorless.multiple([
                               Validatorless.required(
                                   'Você precisa digitar um senha'),
@@ -146,6 +159,8 @@ class _CreateAccountPageState extends State<CreateAccountPage>
                           return TextFormField(
                             obscureText: !registerController.isVisible,
                             controller: confirmePasswordEC,
+                            focusNode: confirmePasswordFocus,
+                            textInputAction: TextInputAction.done,
                             validator: Validatorless.multiple([
                               Validatorless.required(
                                   'Digite a senha de confirmação'),
@@ -180,7 +195,6 @@ class _CreateAccountPageState extends State<CreateAccountPage>
                         },
                       ),
                       const SizedBox(height: 20),
-                      
                     ],
                   ),
                 ),

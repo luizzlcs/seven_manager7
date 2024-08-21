@@ -18,11 +18,6 @@ class _CheckDataState extends State<CheckData>
   final RegisterController controller = getIt();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   bool get wantKeepAlive => true;
 
   @override
@@ -66,7 +61,6 @@ class _CheckDataState extends State<CheckData>
                           const SizedBox(height: 20),
                           const TitleWidget(name: 'SOBRE SEU ACESSO'),
                           FieldsWidgets(
-                            
                               field:
                                   'Nome: ${controller.dataAcountPage['userName']}'),
                           FieldsWidgets(
@@ -83,7 +77,7 @@ class _CheckDataState extends State<CheckData>
                                   'CPF: ${controller.dataAboutYouPage['cpf']}'),
                           FieldsWidgets(
                               field:
-                                  'Data de nascimento: ${controller.dataAboutYouPage['dateOfBirthPerson']}'),
+                                  'Data de nascimento: ${controller.dataAboutYouPage['birth']}'),
                           FieldsWidgets(
                               field:
                                   'WhastApp: ${controller.dataAboutYouPage['whastAppPerson']}'),
