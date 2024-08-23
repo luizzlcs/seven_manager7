@@ -6,30 +6,29 @@ import 'package:seven_manager/src/core/injection/injection.dart';
 import 'package:seven_manager/src/core/services/firebase/firebase_storage_service.dart';
 import 'package:seven_manager/src/core/theme/seven_manager_theme.dart';
 import 'package:seven_manager/src/core/widgets/helpers/messages.dart';
-import 'package:seven_manager/src/core/widgets/imageAvatar/image_profile_controller.dart';
-
 import 'options_bottom_sheet.dart';
 
 class ImageAvatarWidget extends StatefulWidget {
-  const ImageAvatarWidget({super.key});
+  const ImageAvatarWidget({super.key, required this.imageController});
+
+  final dynamic imageController;
 
   @override
   State<ImageAvatarWidget> createState() => _ImageAvatarWidgetState();
 }
 
 class _ImageAvatarWidgetState extends State<ImageAvatarWidget> with AutomaticKeepAliveClientMixin {
-  final ImageProfileController _imageController = getIt();
   final FirebaseStorageService _storage = getIt();
 
   @override
   void initState() {
-    _imageController.addListener(message);
+    widget.imageController.addListener(message);
     super.initState();
   }
 
   void message() {
-    if (_imageController.message.contains('Nenhuma')) {
-      Messages.showError(_imageController.message, context);
+    if (widget.imageController.message.contains('Nenhuma')) {
+      Messages.showError(widget.imageController.message, context);
     }
   }
 
@@ -49,17 +48,17 @@ class _ImageAvatarWidgetState extends State<ImageAvatarWidget> with AutomaticKee
           return OptionsBottomSheet(
             onGalleryTap: () {
               Navigator.of(context).pop();
-              _imageController.pickEditAndUploadImage(ImageSource.gallery);
+              widget.imageController.pickEditAndUploadImage(ImageSource.gallery);
             },
             onCameraTap: () {
               Navigator.of(context).pop();
-              _imageController.pickEditAndUploadImage(ImageSource.camera);
+              widget.imageController.pickEditAndUploadImage(ImageSource.camera);
             },
             onRemoveTap: () {
               Navigator.of(context).pop();
-              _imageController.clearFile();
-              if (_imageController.urlImage != null) {
-                _storage.deleteImage(_imageController.urlImage!);
+              widget.imageController.clearFile();
+              if (widget.imageController.urlImage != null) {
+                _storage.deleteImage(widget.imageController.urlImage!);
               }
             },
           );
@@ -73,13 +72,13 @@ class _ImageAvatarWidgetState extends State<ImageAvatarWidget> with AutomaticKee
           radius: 75,
           backgroundColor: SevenManagerTheme.tealBlue,
           child: AnimatedBuilder(
-            animation: _imageController,
+            animation: widget.imageController,
             builder: (context, child) {
               return CircleAvatar(
                 radius: 65,
                 backgroundColor: Colors.grey[300],
-                backgroundImage: _imageController.imageFile != null
-                    ? FileImage(_imageController.imageFile!)
+                backgroundImage: widget.imageController.imageFile != null
+                    ? FileImage(widget.imageController.imageFile!)
                     : const AssetImage(
                         AppImages.avatar,
                       ),
