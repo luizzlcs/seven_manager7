@@ -98,6 +98,7 @@ class RegisterController with ChangeNotifier {
       imageAvatar: dataAboutYouPage['imageAvatar'],
       emailPerson: dataAcountPage['userEmail'],
       password: dataAcountPage['userPassword'],
+      urlImageLogo: dataChurchPage['urlImageLogo'],
       districtChuchs: dataChurchPage['districtChuchs'],
       cityChuchs: dataChurchPage['cityChuchs'],
       zipCodeChuchs: dataChurchPage['zipCodeChuchs'],
