@@ -29,6 +29,7 @@ class AuthServiceFirebaseImpl {
     String? imageAvatar,
     required String emailPerson,
     required String password,
+    String? urlImageLogo,
     required String districtChuchs,
     required String cityChuchs,
     required String zipCodeChuchs,
@@ -55,6 +56,7 @@ class AuthServiceFirebaseImpl {
         // Cria a igreja
         final newChurch = ChurchsModel(
           districtChuchs: districtChuchs,
+          urlImageLogo: urlImageLogo,
           cityChuchs: cityChuchs,
           zipCodeChuchs: zipCodeChuchs,
           streetChuchs: streetChuchs,
