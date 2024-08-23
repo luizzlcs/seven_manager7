@@ -4,6 +4,7 @@ class ChurchsModel {
   ChurchsModel({
     this.idChuchs,
     required this.districtChuchs,
+    this.urlImageLogo,
     required this.cityChuchs,
     required this.zipCodeChuchs,
     required this.streetChuchs,
@@ -12,6 +13,7 @@ class ChurchsModel {
   }) : creationDate = DateTime.now().toIso8601String();
 
   final String? idChuchs;
+  final String? urlImageLogo;
   final String zipCodeChuchs;
   final String streetChuchs;
   final String districtChuchs;
@@ -22,6 +24,7 @@ class ChurchsModel {
   Map<String, dynamic> toMap() {
     return {
       'idChuchs': idChuchs,
+      'urlImageLogo': urlImageLogo,
       'zipCodeChuchs': zipCodeChuchs,
       'streetChuchs': streetChuchs,
       'districtChuchs': districtChuchs,
@@ -34,6 +37,7 @@ class ChurchsModel {
   factory ChurchsModel.fromMap(Map<String, dynamic> map) {
     return ChurchsModel(
       idChuchs: map['idChuchs'],
+      urlImageLogo: map['urlImageLogo'] ?? '',
       zipCodeChuchs: map['zipCodeChuchs'] ?? '',
       streetChuchs: map['streetChuchs'] ?? '',
       districtChuchs: map['districtChuchs'] ?? '',
