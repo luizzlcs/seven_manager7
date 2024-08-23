@@ -2,8 +2,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:seven_manager/src/core/injection/injection.dart';
 import 'package:seven_manager/src/core/widgets/helpers/debounce.dart';
-import 'package:seven_manager/src/core/widgets/imageAvatar/image_profile_controller.dart';
 import 'package:seven_manager/src/model/user_model.dart';
+import 'package:seven_manager/src/pages/auth/register/pages/createAccountPage/image_profile_controller_account.dart';
 import 'package:seven_manager/src/pages/auth/register/register_controller.dart';
 
 mixin CreateAccountPageMixin<T extends StatefulWidget> on State<T> {
@@ -22,7 +22,7 @@ mixin CreateAccountPageMixin<T extends StatefulWidget> on State<T> {
 
 
   final RegisterController registerController = getIt();
-  final ImageProfileController imageProfileController = getIt();
+  final ImageProfileControllerAccount imageProfileController = getIt();
   final debounce = Debounce();
 
   @override

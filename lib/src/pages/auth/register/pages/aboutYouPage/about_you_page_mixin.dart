@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:seven_manager/src/core/injection/injection.dart';
 import 'package:seven_manager/src/core/widgets/helpers/debounce.dart';
-import 'package:seven_manager/src/core/widgets/imageAvatar/image_profile_controller.dart';
 import 'package:seven_manager/src/model/persons_model.dart';
 import 'package:seven_manager/src/pages/auth/register/pages/aboutYouPage/cep_controller_you.dart';
+import 'package:seven_manager/src/pages/auth/register/pages/createAccountPage/image_profile_controller_account.dart';
 import 'package:seven_manager/src/pages/auth/register/register_controller.dart';
 
 mixin AboutYouPageMixin<T extends StatefulWidget> on State<T> {
@@ -35,7 +35,7 @@ mixin AboutYouPageMixin<T extends StatefulWidget> on State<T> {
   final FocusNode confimAddresFocus = FocusNode();
 
   final RegisterController registerController = getIt();
-  final ImageProfileController imageProfileController = getIt();
+  final ImageProfileControllerAccount imageProfileController = getIt();
   final CepControllerYou cepController = getIt();
 
   final debounce = Debounce();
@@ -82,7 +82,6 @@ mixin AboutYouPageMixin<T extends StatefulWidget> on State<T> {
     Map<String, dynamic> personMap = personModel.toMap();
 
     registerController.changeDataAboutYouPage(personMap);
-    // imageProfileController.clearUrl();
   }
 
   

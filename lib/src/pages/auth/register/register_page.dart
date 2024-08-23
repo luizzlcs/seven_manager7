@@ -6,10 +6,11 @@ import 'package:seven_manager/src/core/theme/seven_manager_theme.dart';
 import 'package:seven_manager/src/core/widgets/helpers/debounce.dart';
 import 'package:seven_manager/src/core/widgets/helpers/loader.dart';
 import 'package:seven_manager/src/core/widgets/helpers/messages.dart';
-import 'package:seven_manager/src/core/widgets/imageAvatar/image_profile_controller.dart';
+import 'package:seven_manager/src/pages/auth/register/pages/aboutYouchurchPage/image_profile_controller_church.dart';
 import 'package:seven_manager/src/pages/auth/register/pages/aboutYouchurchPage/about_you_church_page.dart';
 import 'package:seven_manager/src/pages/auth/register/pages/aboutYouPage/about_you_page.dart';
 import 'package:seven_manager/src/pages/auth/register/pages/createAccountPage/create_account_page.dart';
+import 'package:seven_manager/src/pages/auth/register/pages/createAccountPage/image_profile_controller_account.dart';
 import 'package:seven_manager/src/pages/auth/register/pages/widgets/button_widget.dart';
 import 'package:seven_manager/src/pages/auth/register/register_controller.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -26,7 +27,8 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> with Loader {
-  ImageProfileController imageProfileController = getIt();
+  ImageProfileControllerChurch imageLogoController = getIt();
+  ImageProfileControllerAccount imageAvatarController = getIt();
   @override
   void initState() {
     registerController.addListener(_switchController);
@@ -116,8 +118,9 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
           icon: Icons.how_to_reg,
           onConfirm: () {
             Navigator.pushReplacementNamed(context, AppRouter.login);
-            imageProfileController.clearImageUrlFile();
-            log('DELETANDO IMAGE: ${imageProfileController.urlImage}');
+            imageLogoController.clearImageUrlFile();
+            imageAvatarController.clearImageUrlFile();
+            log('DELETANDO IMAGE: ${imageLogoController.urlImage}');
           },
         );
       },
@@ -183,7 +186,8 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
                                 width: 5,
                               ),
                               Visibility(
-                                visible: (_currentPage >= 0 && _currentPage < 3),
+                                visible:
+                                    (_currentPage >= 0 && _currentPage < 3),
                                 child: ButtonWidget(
                                   name: 'AVANÇAR',
                                   alignment: IconAlignment.end,
@@ -210,14 +214,23 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
                                   alignment: IconAlignment.start,
                                   icon: Icons.folder_open_sharp,
                                   function: () async {
+                                    // Limpando as string de imagens na controller.
                                     await registerController.createUser();
-                                    if (imageProfileController.urlImage != null) {
-                                      if (imageProfileController.imageFile !=
+                                    if (imageLogoController.urlImage != null) {
+                                      if (imageLogoController.imageFile !=
                                           null) {
-                                        imageProfileController.clearUrl();
-                                        imageProfileController.clearFile();
+                                        imageLogoController.clearUrl();
+                                        imageLogoController.clearFile();
                                       }
-                                    }                                   
+                                    }
+                                    if (imageAvatarController.urlImage !=
+                                        null) {
+                                      if (imageAvatarController.imageFile !=
+                                          null) {
+                                        imageAvatarController.clearUrl();
+                                        imageAvatarController.clearFile();
+                                      }
+                                    }
                                   },
                                 ),
                               )

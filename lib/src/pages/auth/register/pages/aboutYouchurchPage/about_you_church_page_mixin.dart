@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:seven_manager/src/core/injection/injection.dart';
 import 'package:seven_manager/src/core/widgets/helpers/debounce.dart';
 import 'package:seven_manager/src/model/churchs_model.dart';
+import 'package:seven_manager/src/pages/auth/register/pages/aboutYouchurchPage/image_profile_controller_church.dart';
 import 'package:seven_manager/src/pages/auth/register/register_controller.dart';
 
 mixin AboutYouChurchPageMixin<T extends StatefulWidget> on State<T> {
@@ -21,11 +22,12 @@ mixin AboutYouChurchPageMixin<T extends StatefulWidget> on State<T> {
   final debouce = Debounce();
 
   final RegisterController registerController = getIt();
+  final ImageProfileControllerChurch _imageController = getIt();
  
 
   @override
   void initState() {
-    registerController.addListener(_checkDataAboutChurch);
+     registerController.addListener(_checkDataAboutChurch);
     super.initState();
   }
 
@@ -36,14 +38,16 @@ mixin AboutYouChurchPageMixin<T extends StatefulWidget> on State<T> {
     districtChuchsEC.dispose();
     cityChuchsEC.dispose();
     stateChuchsEC.dispose();
-    registerController.removeListener(_checkDataAboutChurch);
+     registerController.removeListener(_checkDataAboutChurch);
     super.dispose();
   }
 
   void _onTextFieldChange() {
+    log('IMAGE LOGO CHURCH: ${_imageController.urlImage}');
     log('CHURCH MIXIN: Enviando dados para controller.');
 
     ChurchsModel churchModel = ChurchsModel(
+      urlImageLogo: _imageController.urlImage ,
       districtChuchs: districtChuchsEC.text,
       cityChuchs: cityChuchsEC.text,
       zipCodeChuchs: zipCodeChuchsEC.text,
@@ -53,10 +57,10 @@ mixin AboutYouChurchPageMixin<T extends StatefulWidget> on State<T> {
     );
     Map<String, dynamic> churchMap = churchModel.toMap();
 
-    registerController.changeDataChurchPage(churchMap);
+     registerController.changeDataChurchPage(churchMap);
   }
 
   void _checkDataAboutChurch() {
-    if (registerController.submitFormChurch()) _onTextFieldChange();
+    if ( registerController.submitFormChurch()) _onTextFieldChange();
   }
 }
