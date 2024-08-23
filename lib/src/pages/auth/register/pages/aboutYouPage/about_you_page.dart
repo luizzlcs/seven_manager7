@@ -1,9 +1,9 @@
-import 'dart:developer';
-
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:seven_manager/src/core/constants/app_images.dart';
+import 'package:seven_manager/src/core/widgets/helpers/messages.dart';
 import 'package:seven_manager/src/pages/auth/register/pages/aboutYouPage/about_you_page_mixin.dart';
 import 'package:validatorless/validatorless.dart';
 import '../../../../../core/theme/seven_manager_theme.dart';
@@ -17,11 +17,6 @@ class AboutYouPage extends StatefulWidget {
 
 class _AboutYouPageState extends State<AboutYouPage>
     with AutomaticKeepAliveClientMixin, AboutYouPageMixin {
-  fetchCep() {
-    cepController.buscarCep('59520000');
-    statePersonEC.text = cepController.cepModel.logradouro;
-  }
-
   @override
   bool get wantKeepAlive => true;
 
@@ -199,23 +194,52 @@ class _AboutYouPageState extends State<AboutYouPage>
                               CepInputFormatter()
                             ],
                             decoration: InputDecoration(
-                                label: const Text('Cep'),
-                                prefixIcon: const Icon(
-                                  Icons.pin,
-                                  color: SevenManagerTheme.tealBlue,
-                                  size: 28,
+                              label: const Text('Cep'),
+                              prefixIcon: const Icon(
+                                Icons.pin,
+                                color: SevenManagerTheme.tealBlue,
+                                size: 28,
+                              ),
+                              suffixIcon: IconButton(
+                                onPressed: () async {
+                                  cepController
+                                      .zipCodeSearch(zipCodePersonEC.text)
+                                      .then((_) {
+                                    if (cepController.cepModel != null) {
+                                      streetPersonEC.text =
+                                          cepController.cepModel!.logradouro;
+                                          districtPersonEC.text =
+                                          cepController.cepModel!.bairro;
+                                      cityPersonEC.text =
+                                          cepController.cepModel!.localidade;
+                                      statePersonEC.text =
+                                          cepController.cepModel!.uf;
+                                    } else {
+                                      Messages.showInfo(
+                                          'O CEP: ${zipCodePersonEC.text} não foi encontrado',
+                                          context);
+                                      streetPersonEC.text =
+                                          'CEP não encontrado';
+                                    }
+                                  });
+                                },
+                                style: IconButton.styleFrom(
+                                    backgroundColor: SevenManagerTheme.tealBlue,
+                                    side: const BorderSide(
+                                        color: Colors
+                                            .transparent), // Remove border for a flat look
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                          bottomRight: Radius.circular(10),
+                                          topRight: Radius.circular(10)),
+                                    )),
+                                color: Colors.red,
+                                icon: Image.asset(
+                                  AppImages.correiosLogo,
+                                  width: 25,
                                 ),
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    
-                                      fetchCep();
-                                      streetPersonEC.text = cepController.cepModel.logradouro;
-                                      log('FETCH-CEP: ${streetPersonEC.text}');
-                                   
-                                  },
-                                  icon: const Icon(
-                                      Icons.radio_button_checked_sharp),
-                                )),
+                              ),
+                            ),
                           );
                         },
                       ),
@@ -225,7 +249,7 @@ class _AboutYouPageState extends State<AboutYouPage>
                         focusNode: streetPersonFocus,
                         onFieldSubmitted: (_) async {
                           FocusScope.of(context)
-                              .requestFocus(numberPersonFocus);
+                              .requestFocus(districtPersonFocus);
                         },
                         textInputAction: TextInputAction.next,
                         decoration: const InputDecoration(
@@ -233,6 +257,24 @@ class _AboutYouPageState extends State<AboutYouPage>
                           hintText: 'Rua, aveninda, travessa...',
                           prefixIcon: Icon(
                             Icons.map,
+                            color: SevenManagerTheme.tealBlue,
+                            size: 28,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                       TextFormField(
+                        controller: districtPersonEC,
+                        focusNode: districtPersonFocus,
+                        onFieldSubmitted: (_) async {
+                          FocusScope.of(context)
+                              .requestFocus(numberPersonFocus);
+                        },
+                        textInputAction: TextInputAction.next,
+                        decoration: const InputDecoration(
+                          label: Text('Bairro'),
+                          prefixIcon: Icon(
+                            Icons.account_balance,
                             color: SevenManagerTheme.tealBlue,
                             size: 28,
                           ),
@@ -377,11 +419,6 @@ class _AboutYouPageState extends State<AboutYouPage>
             ),
           ),
         ),
-        ElevatedButton(
-            onPressed: () {
-              cepController.buscarCep('59129490');
-            },
-            child: const Text('Buscar CEP'))
       ],
     );
   }

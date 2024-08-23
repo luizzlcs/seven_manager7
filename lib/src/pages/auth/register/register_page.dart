@@ -171,6 +171,7 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
                                 visible: (_currentPage >= 1),
                                 child: ButtonWidget(
                                   name: 'VOLTAR',
+                                  alignment: IconAlignment.start,
                                   icon: Icons.arrow_back_ios,
                                   function: () {
                                     setState(() {});
@@ -185,6 +186,7 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
                                 visible: (_currentPage >= 0 && _currentPage < 3),
                                 child: ButtonWidget(
                                   name: 'AVANÇAR',
+                                  alignment: IconAlignment.end,
                                   icon: Icons.arrow_forward_ios_outlined,
                                   function: () {
                                     setState(() {});
@@ -205,6 +207,7 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
                                 visible: _currentPage == 3,
                                 child: ButtonWidget(
                                   name: 'CONCLUIR',
+                                  alignment: IconAlignment.start,
                                   icon: Icons.folder_open_sharp,
                                   function: () async {
                                     await registerController.createUser();
@@ -214,9 +217,7 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
                                         imageProfileController.clearUrl();
                                         imageProfileController.clearFile();
                                       }
-                                    }
-                                    // registerController.createChurchs();
-                                    // registerController.createPerson();
+                                    }                                   
                                   },
                                 ),
                               )

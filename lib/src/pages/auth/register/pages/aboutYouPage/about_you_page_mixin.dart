@@ -5,7 +5,7 @@ import 'package:seven_manager/src/core/injection/injection.dart';
 import 'package:seven_manager/src/core/widgets/helpers/debounce.dart';
 import 'package:seven_manager/src/core/widgets/imageAvatar/image_profile_controller.dart';
 import 'package:seven_manager/src/model/persons_model.dart';
-import 'package:seven_manager/src/pages/auth/register/cep_controller.dart';
+import 'package:seven_manager/src/pages/auth/register/pages/aboutYouPage/cep_controller_you.dart';
 import 'package:seven_manager/src/pages/auth/register/register_controller.dart';
 
 mixin AboutYouPageMixin<T extends StatefulWidget> on State<T> {
@@ -15,6 +15,7 @@ mixin AboutYouPageMixin<T extends StatefulWidget> on State<T> {
   final TextEditingController whastAppPersonEC = TextEditingController();
   final TextEditingController zipCodePersonEC = TextEditingController();
   final TextEditingController streetPersonEC = TextEditingController();
+  final TextEditingController districtPersonEC = TextEditingController();
   final TextEditingController numberPersonEC = TextEditingController();
   final TextEditingController complementPersonEC = TextEditingController();
   final TextEditingController cityPersonEC = TextEditingController();
@@ -26,6 +27,7 @@ mixin AboutYouPageMixin<T extends StatefulWidget> on State<T> {
   final FocusNode whastAppPersonFocus = FocusNode();
   final FocusNode zipCodePersonFocus = FocusNode();
   final FocusNode streetPersonFocus = FocusNode();
+  final FocusNode districtPersonFocus = FocusNode();
   final FocusNode numberPersonFocus = FocusNode();
   final FocusNode complementPersonFocus = FocusNode();
   final FocusNode cityPersonFocus = FocusNode();
@@ -34,7 +36,7 @@ mixin AboutYouPageMixin<T extends StatefulWidget> on State<T> {
 
   final RegisterController registerController = getIt();
   final ImageProfileController imageProfileController = getIt();
-  final CepController cepController = getIt();
+  final CepControllerYou cepController = getIt();
 
   final debounce = Debounce();
 

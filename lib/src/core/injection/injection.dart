@@ -9,7 +9,8 @@ import 'package:seven_manager/src/interfaces/http_client.dart';
 import 'package:seven_manager/src/model/cep_model.dart';
 import 'package:seven_manager/src/pages/auth/login/login_controller.dart';
 import 'package:seven_manager/src/pages/auth/recoverPassword/recover_controller.dart';
-import 'package:seven_manager/src/pages/auth/register/cep_controller.dart';
+import 'package:seven_manager/src/pages/auth/register/pages/aboutYouPage/cep_controller_you.dart';
+import 'package:seven_manager/src/pages/auth/register/pages/aboutYouchurchPage/cep_controller_you_church.dart';
 import 'package:seven_manager/src/pages/auth/register/register_controller.dart';
 import 'package:seven_manager/src/repositories/cep_repository.dart';
 import '../services/firebase/auth_service_firebase_impl.dart';
@@ -28,7 +29,8 @@ void configureDependencies() {
   getIt.registerLazySingleton<RegisterController>(() => RegisterController(firebaseAuth: getIt<AuthServiceFirebaseImpl>()));
   getIt.registerLazySingleton<LoginController>(() => LoginController(firebaseAuth: getIt<AuthServiceFirebaseImpl>()));
   getIt.registerLazySingleton<ImageProfileController>(() => ImageProfileController(storage: getIt<FirebaseStorageService>()));
-  getIt.registerLazySingleton<CepController>(() => CepController(cepRepository: getIt<CepRepository>()));
+  getIt.registerLazySingleton<CepControllerYou>(() => CepControllerYou(cepRepository: getIt<CepRepository>()));
+  getIt.registerLazySingleton<CepControllerYouChurch>(() => CepControllerYouChurch(cepRepository: getIt<CepRepository>()));
 
   // Services
   getIt.registerLazySingleton<FirebaseStorageService>(() => FirebaseStorageService());

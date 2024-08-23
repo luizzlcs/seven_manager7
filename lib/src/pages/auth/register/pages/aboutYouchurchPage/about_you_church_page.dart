@@ -2,8 +2,11 @@ import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:seven_manager/src/core/constants/app_images.dart';
+import 'package:seven_manager/src/core/injection/injection.dart';
+import 'package:seven_manager/src/core/widgets/helpers/messages.dart';
 import 'package:seven_manager/src/pages/auth/login/widgets/image_logo_widget.dart';
 import 'package:seven_manager/src/pages/auth/register/pages/aboutYouchurchPage/about_you_church_page_mixin.dart';
+import 'package:seven_manager/src/pages/auth/register/pages/aboutYouchurchPage/cep_controller_you_church.dart';
 import 'package:validatorless/validatorless.dart';
 
 import '../../../../../core/theme/seven_manager_theme.dart';
@@ -17,6 +20,7 @@ class AboutYouChurchPage extends StatefulWidget {
 
 class _AboutYouChurchPageState extends State<AboutYouChurchPage>
     with AutomaticKeepAliveClientMixin, AboutYouChurchPageMixin {
+      final CepControllerYouChurch cepChurchController = getIt();
   @override
   bool get wantKeepAlive => true;
 
@@ -73,13 +77,52 @@ class _AboutYouChurchPageState extends State<AboutYouChurchPage>
                           CepInputFormatter()
                         ],
                         validator: Validatorless.required('Digite o Cep'),
-                        decoration: const InputDecoration(
-                          label: Text('Cep'),
-                          prefixIcon: Icon(
+                        decoration:  InputDecoration(
+                          label: const Text('Cep'),
+                          prefixIcon: const Icon(
                             Icons.pin,
                             color: SevenManagerTheme.tealBlue,
                             size: 28,
                           ),
+                          suffixIcon: IconButton(
+                                onPressed: () async {
+                                  cepChurchController
+                                      .zipCodeSearch(zipCodeChuchsEC.text)
+                                      .then((_) {
+                                    if (cepChurchController.cepModel != null) {
+                                      streetChuchsEC.text =
+                                          cepChurchController.cepModel!.logradouro;
+                                      districtChuchsEC.text =cepChurchController.cepModel!.bairro;
+                                      cityChuchsEC.text =
+                                          cepChurchController.cepModel!.localidade;
+                                      stateChuchsEC.text =
+                                          cepChurchController.cepModel!.uf;
+                                    } else {
+                                      Messages.showInfo(
+                                          'O CEP: ${zipCodeChuchsEC.text} não foi encontrado',
+                                          context);
+                                      streetChuchsEC.text =
+                                          'CEP não encontrado';
+                                    }
+                                  });
+                                },
+                                style: IconButton.styleFrom(
+                                    backgroundColor: SevenManagerTheme.tealBlue,
+                                    side: const BorderSide(
+                                        color: Colors
+                                            .transparent), // Remove border for a flat look
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                          bottomRight: Radius.circular(10),
+                                          topRight: Radius.circular(10)),
+                                    )),
+                                color: Colors.red,
+                                icon: Image.asset(
+                                  AppImages.correiosLogo,
+                                  width: 25,
+                                ),
+                              ),
+                          
                         ),
                       ),
                       const SizedBox(height: 20),
