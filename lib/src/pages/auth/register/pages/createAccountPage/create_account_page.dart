@@ -70,9 +70,8 @@ class _CreateAccountPageState extends State<CreateAccountPage>
                         ),
                       ),
                       const SizedBox(height: 10),
-                      const ImageAvatarWidget(),
-                      // const ImageLogoWidget(pathImage: AppImages.logoIasd),
-                      const SizedBox(height: 10),
+                      ImageAvatarWidget(imageController: imageProfileController,),
+                      const SizedBox(height: 20),
                       TextFormField(
                         controller: nameEC,
                         focusNode: nameFocus,

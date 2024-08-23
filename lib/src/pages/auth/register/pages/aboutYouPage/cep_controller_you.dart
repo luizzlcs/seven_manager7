@@ -34,7 +34,7 @@ class CepControllerYou extends ChangeNotifier {
       }
     } catch (e, s) {
       // Tratar erros aqui
-      print('Erro ao buscar CEP: $e $s');
+      log('Erro ao buscar CEP: $e $s');
     }
   }
 }

@@ -235,7 +235,7 @@ class _AboutYouPageState extends State<AboutYouPage>
                                     )),
                                 color: Colors.red,
                                 icon: Image.asset(
-                                  AppImages.correiosLogo,
+                                  AppImages.map,
                                   width: 25,
                                 ),
                               ),
