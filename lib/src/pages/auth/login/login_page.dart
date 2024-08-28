@@ -207,7 +207,7 @@ class _LoginPageState extends State<LoginPage> with Loader {
                                 ),
                                 TextButton(
                                   onPressed: () => Navigator.of(context)
-                                      .pushNamed(AppRouter.register),
+                                      .pushReplacementNamed(AppRouter.register),
                                   child: const Text(
                                     'Cadastre-se?',
                                   ),

@@ -48,6 +48,7 @@ mixin AboutYouPageMixin<T extends StatefulWidget> on State<T> {
 
   @override
   void dispose() {
+    //TextEditingController
     malePersonEC.dispose();
     cpfEC.dispose();
     birthEC.dispose();
@@ -58,6 +59,17 @@ mixin AboutYouPageMixin<T extends StatefulWidget> on State<T> {
     complementPersonEC.dispose();
     cityPersonEC.dispose();
     statePersonEC.dispose();
+    //FocusNode
+    malePersonFocus.dispose();
+    cpfFocus.dispose();
+    birthFocus.dispose();
+    whastAppPersonFocus.dispose();
+    zipCodePersonFocus.dispose();
+    streetPersonFocus.dispose();
+    numberPersonFocus.dispose();
+    complementPersonFocus.dispose();
+    cityPersonFocus.dispose();
+    statePersonFocus.dispose();
     super.dispose();
   }
 

@@ -33,11 +33,18 @@ mixin AboutYouChurchPageMixin<T extends StatefulWidget> on State<T> {
 
   @override
   void dispose() {
+    //TextEditingController
     zipCodeChuchsEC.dispose();
     streetChuchsEC.dispose();
     districtChuchsEC.dispose();
     cityChuchsEC.dispose();
     stateChuchsEC.dispose();
+    //FocusNode
+    zipCodeChuchsFocus.dispose();
+    streetChurchsFocus.dispose();
+    districtChurchsFocus.dispose();
+    cityChurchsFocus.dispose();
+    stateChurchsFocus.dispose();
      registerController.removeListener(_checkDataAboutChurch);
     super.dispose();
   }

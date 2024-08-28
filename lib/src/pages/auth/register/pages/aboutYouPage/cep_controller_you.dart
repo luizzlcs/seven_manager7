@@ -13,8 +13,6 @@ class CepControllerYou extends ChangeNotifier {
 
   CepModel? get cepModel => _cepModel;
 
-  // final CepRepository _cepRepository = getIt();
-
   Future<void> zipCodeSearch(String? cep) async {
     String cep2 ='';
     if (cep != null){

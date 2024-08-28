@@ -1,7 +1,9 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:seven_manager/src/core/constants/app_router.dart';
 import 'package:seven_manager/src/core/services/firebase/auth_service_firebase_impl.dart';
+import 'package:seven_manager/src/core/widgets/helpers/messages.dart';
 
 enum RegisterStatus { initial, loading, success, error }
 
@@ -89,9 +91,20 @@ class RegisterController with ChangeNotifier {
     log('DADOS CHURCH: $dataChurchPage');
   }
 
-  Future<void> createUser() async {
+  void changeRegisterStatusLoading() {
     registerStatus = RegisterStatus.loading;
     notifyListeners();
+  }
+
+  void changeRegisterStatusInitial() {
+    registerStatus = RegisterStatus.initial;
+    notifyListeners();
+  }
+
+  Future<void> createUser(context) async {
+    registerStatus = RegisterStatus.loading;
+    notifyListeners();
+    log('REGISTER STATUS: $registerStatus');
 
     String? userId = await firebaseAuth.createUser(
       namePerson: dataAcountPage['userName'],
@@ -117,22 +130,24 @@ class RegisterController with ChangeNotifier {
     );
     log('>>> ERRO AO CRIAR USUÁRIO: $userId');
     if (userId != null) {
+      log('REGISTER STATUS: Erro!!!');
+      Messages.showError(message, context);
       message = userId;
       registerStatus = RegisterStatus.error;
       notifyListeners();
       registerStatus = RegisterStatus.initial;
       userId = null;
-      message = 'userId';
       notifyListeners();
-    }else{
+    } else {
       registerStatus = RegisterStatus.success;
       message = 'Usuário: ${dataAcountPage['userEmail']} criado com sucesso!';
+      log('REGISTER STATUS: Sucesso!!!');
       notifyListeners();
-      message = '';
       registerStatus = RegisterStatus.initial;
+      Navigator.of(context).pushReplacementNamed(AppRouter.login);
+      Messages.showInfo(message, context);
+      message = '';
       notifyListeners();
-
-
     }
   }
 }

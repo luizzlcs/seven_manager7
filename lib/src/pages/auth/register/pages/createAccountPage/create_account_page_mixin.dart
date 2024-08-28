@@ -27,6 +27,7 @@ mixin CreateAccountPageMixin<T extends StatefulWidget> on State<T> {
 
   @override
   void initState() {
+    
     confirmePasswordEC.addListener(() {
       registerController.checkPasswordsMatch(
           passwordEC.text, confirmePasswordEC.text);
@@ -43,10 +44,14 @@ mixin CreateAccountPageMixin<T extends StatefulWidget> on State<T> {
 
   @override
   void dispose() {
+    //TextEditingController
     nameEC.dispose();
     emailEC.dispose();
     passwordEC.dispose();
     confirmePasswordEC.dispose();
+    //FocusNode
+    nameFocus.dispose();
+    emailFocus.dispose();
     registerController.removeListener(_checkDataAccount);
     super.dispose();
   }
