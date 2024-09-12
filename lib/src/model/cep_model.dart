@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class CepModel {
-  CepModel({
+  const CepModel({
     required this.cep,
     required this.logradouro,
     required this.complemento,

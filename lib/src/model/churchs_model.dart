@@ -1,9 +1,7 @@
 import 'dart:convert';
 
-
 class ChurchsModel {
-
-  ChurchsModel({
+  const ChurchsModel({
     required this.idChurchs,
     required this.districtChuchs,
     this.urlImageLogo,
@@ -45,7 +43,7 @@ class ChurchsModel {
       districtChuchs: map['districtChuchs'] ?? '',
       cityChuchs: map['cityChuchs'] ?? '',
       stateChuchs: map['stateChuchs'] ?? '',
-      creationDate: map['creationDate']?? '',
+      creationDate: map['creationDate'] ?? '',
     );
   }
 
