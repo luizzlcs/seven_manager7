@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:seven_manager/src/core/injection/injection.dart';
 import 'package:seven_manager/src/core/widgets/helpers/debounce.dart';
 import 'package:seven_manager/src/model/churchs_model.dart';
@@ -23,11 +24,10 @@ mixin AboutYouChurchPageMixin<T extends StatefulWidget> on State<T> {
 
   final RegisterController registerController = getIt();
   final ImageProfileControllerChurch _imageController = getIt();
- 
 
   @override
   void initState() {
-     registerController.addListener(_checkDataAboutChurch);
+    registerController.addListener(_checkDataAboutChurch);
     super.initState();
   }
 
@@ -45,29 +45,50 @@ mixin AboutYouChurchPageMixin<T extends StatefulWidget> on State<T> {
     districtChurchsFocus.dispose();
     cityChurchsFocus.dispose();
     stateChurchsFocus.dispose();
-     registerController.removeListener(_checkDataAboutChurch);
+    registerController.removeListener(_checkDataAboutChurch);
     super.dispose();
   }
 
   void _onTextFieldChange() {
     log('IMAGE LOGO CHURCH: ${_imageController.urlImage}');
     log('CHURCH MIXIN: Enviando dados para controller.');
+    DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
 
     ChurchsModel churchModel = ChurchsModel(
-      urlImageLogo: _imageController.urlImage ,
+      idChurchs: '021',
+      urlImageLogo: _imageController.urlImage,
       districtChuchs: districtChuchsEC.text,
       cityChuchs: cityChuchsEC.text,
       zipCodeChuchs: zipCodeChuchsEC.text,
       streetChuchs: streetChuchsEC.text,
       stateChuchs: stateChuchsEC.text,
-      creationDate: DateTime.now().toIso8601String()
+      creationDate: formatter.format(DateTime.now()),
     );
-    Map<String, dynamic> churchMap = churchModel.toMap();
 
-     registerController.changeDataChurchPage(churchMap);
+    var ChurchsModel(
+      :urlImageLogo,
+      :districtChuchs,
+      :cityChuchs,
+      :zipCodeChuchs,
+      :streetChuchs,
+      :stateChuchs,
+      :creationDate
+    ) = churchModel;
+
+    Map<String, dynamic> churchMap = {
+      'urlImageLogo': urlImageLogo,
+      'districtChuchs': districtChuchs,
+      'cityChuchs': cityChuchs,
+      'zipCodeChuchs': zipCodeChuchs,
+      'streetChuchs': streetChuchs,
+      'stateChuchs': stateChuchs,
+      'creationDate': creationDate
+    }; //churchModel.toMap();
+
+    registerController.changeDataChurchPage(churchMap);
   }
 
   void _checkDataAboutChurch() {
-    if ( registerController.submitFormChurch()) _onTextFieldChange();
+    if (registerController.submitFormChurch()) _onTextFieldChange();
   }
 }

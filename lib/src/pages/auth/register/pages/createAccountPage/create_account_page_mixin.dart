@@ -17,9 +17,6 @@ mixin CreateAccountPageMixin<T extends StatefulWidget> on State<T> {
   final FocusNode emailFocus = FocusNode();
   final FocusNode passwordFocus = FocusNode();
   final FocusNode confirmePasswordFocus = FocusNode();
-  
-
-
 
   final RegisterController registerController = getIt();
   final ImageProfileControllerAccount imageProfileController = getIt();
@@ -27,7 +24,6 @@ mixin CreateAccountPageMixin<T extends StatefulWidget> on State<T> {
 
   @override
   void initState() {
-    
     confirmePasswordEC.addListener(() {
       registerController.checkPasswordsMatch(
           passwordEC.text, confirmePasswordEC.text);
@@ -57,21 +53,27 @@ mixin CreateAccountPageMixin<T extends StatefulWidget> on State<T> {
   }
 
   void _onTextFieldChange() {
-   
-      log('ACCOUNT: Enviando dados para controller.');
-      UserModel userModel = UserModel(
-        userName: nameEC.text,
-        userEmail: emailEC.text,
-        userPassword: passwordEC.text,
-      );
-      Map<String, dynamic> userMap = userModel.toMap();
+    log('ACCOUNT: Enviando dados para controller.');
+    UserModel userModel = UserModel(
+      idUser: '021',
+      userName: nameEC.text,
+      userEmail: emailEC.text,
+      userPassword: passwordEC.text,
+    );
 
-      registerController.changeDataAcountPage(userMap);
- 
+    var UserModel(userName: name, userEmail: email, userPassword: password) =
+        userModel;
+
+    Map<String, dynamic> userMap = {
+      'userName': name,
+      'userEmail': email,
+      'userPassword': password,
+    };
+
+    registerController.changeDataAcountPage(userMap);
   }
 
   void _checkDataAccount() {
-  
-      if (registerController.submitFormAcount()) _onTextFieldChange();
+    if (registerController.submitFormAcount()) _onTextFieldChange();
   }
 }
