@@ -1,18 +1,20 @@
 import 'dart:convert';
 
+
 class ChurchsModel {
+
   ChurchsModel({
-    this.idChuchs,
+    required this.idChuchs,
     required this.districtChuchs,
     this.urlImageLogo,
     required this.cityChuchs,
     required this.zipCodeChuchs,
     required this.streetChuchs,
     required this.stateChuchs,
-    String? creationDate,
-  }) : creationDate = DateTime.now().toIso8601String();
+    required this.creationDate,
+  });
 
-  final String? idChuchs;
+  final String idChuchs;
   final String? urlImageLogo;
   final String zipCodeChuchs;
   final String streetChuchs;
