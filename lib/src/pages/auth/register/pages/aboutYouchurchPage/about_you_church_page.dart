@@ -64,7 +64,7 @@ class _AboutYouChurchPageState extends State<AboutYouChurchPage>
                         ),
                       ),
                       const SizedBox(height: 20),
-                       ImageAvatarWidget(imageController: _imageController),
+                      ImageAvatarWidget(imageController: _imageController),
                       const SizedBox(height: 20),
                       TextFormField(
                         controller: zipCodeChuchsEC,
@@ -89,25 +89,51 @@ class _AboutYouChurchPageState extends State<AboutYouChurchPage>
                           ),
                           suffixIcon: IconButton(
                             onPressed: () async {
-                              cepChurchController
-                                  .zipCodeSearch(zipCodeChuchsEC.text)
-                                  .then((_) {
-                                if (cepChurchController.cepModel != null) {
-                                  streetChuchsEC.text =
-                                      cepChurchController.cepModel!.logradouro;
-                                  districtChuchsEC.text =
-                                      cepChurchController.cepModel!.bairro;
-                                  cityChuchsEC.text =
-                                      cepChurchController.cepModel!.localidade;
-                                  stateChuchsEC.text =
-                                      cepChurchController.cepModel!.uf;
-                                } else {
-                                  Messages.showInfo(
-                                      'O CEP: ${zipCodeChuchsEC.text} não foi encontrado',
-                                      context);
-                                  streetChuchsEC.text = 'CEP não encontrado';
-                                }
-                              });
+                              await cepChurchController
+                                  .zipCodeSearch(zipCodeChuchsEC.text);
+
+                              // Verifica se houve alguma mensagem de erro
+                              if (cepChurchController.message.isNotEmpty) {
+                                // Exibe a mensagem de erro ou informação para o usuário
+                                Messages.showError(
+                                    cepChurchController.message, context);
+                              } else if (cepChurchController.cepModel != null) {
+                                // Preenche os campos com os dados do CEP encontrado
+                                streetChuchsEC.text =
+                                    cepChurchController.cepModel!.logradouro;
+                                districtChuchsEC.text =
+                                    cepChurchController.cepModel!.bairro;
+                                cityChuchsEC.text =
+                                    cepChurchController.cepModel!.localidade;
+                                stateChuchsEC.text =
+                                    cepChurchController.cepModel!.uf;
+                              } else {
+                                // Caso o CEP não tenha sido encontrado
+                                Messages.showError(
+                                    'O CEP: ${zipCodeChuchsEC.text} não foi encontrado',
+                                    context);
+                                streetChuchsEC.text = 'CEP não encontrado';
+                              }
+
+                              // cepChurchController
+                              //     .zipCodeSearch(zipCodeChuchsEC.text)
+                              //     .then((_) {
+                              //   if (cepChurchController.cepModel != null) {
+                              //     streetChuchsEC.text =
+                              //         cepChurchController.cepModel!.logradouro;
+                              //     districtChuchsEC.text =
+                              //         cepChurchController.cepModel!.bairro;
+                              //     cityChuchsEC.text =
+                              //         cepChurchController.cepModel!.localidade;
+                              //     stateChuchsEC.text =
+                              //         cepChurchController.cepModel!.uf;
+                              //   } else {
+                              //     Messages.showInfo(
+                              //         'O CEP: ${zipCodeChuchsEC.text} não foi encontrado',
+                              //         context);
+                              //     streetChuchsEC.text = 'CEP não encontrado';
+                              //   }
+                              // });
                             },
                             style: IconButton.styleFrom(
                               backgroundColor: SevenManagerTheme.tealBlue,

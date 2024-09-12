@@ -202,37 +202,43 @@ class _AboutYouPageState extends State<AboutYouPage>
                               ),
                               suffixIcon: IconButton(
                                 onPressed: () async {
-                                  cepController
-                                      .zipCodeSearch(zipCodePersonEC.text)
-                                      .then((_) {
-                                    if (cepController.cepModel != null) {
-                                      streetPersonEC.text =
-                                          cepController.cepModel!.logradouro;
-                                          districtPersonEC.text =
-                                          cepController.cepModel!.bairro;
-                                      cityPersonEC.text =
-                                          cepController.cepModel!.localidade;
-                                      statePersonEC.text =
-                                          cepController.cepModel!.uf;
-                                    } else {
-                                      Messages.showInfo(
-                                          'O CEP: ${zipCodePersonEC.text} não foi encontrado',
-                                          context);
-                                      streetPersonEC.text =
-                                          'CEP não encontrado';
-                                    }
-                                  });
+                                  await cepController
+                                      .zipCodeSearch(zipCodePersonEC.text);
+
+                                  // Verifica se houve alguma mensagem de erro
+                                  if (cepController.message.isNotEmpty) {
+                                    // Exibe a mensagem de erro ou informação para o usuário
+                                    Messages.showError(
+                                        cepController.message, context);
+                                  } else if (cepController.cepModel != null) {
+                                    // Preenche os campos com os dados do CEP encontrado
+                                    streetPersonEC.text =
+                                        cepController.cepModel!.logradouro;
+                                    districtPersonEC.text =
+                                        cepController.cepModel!.bairro;
+                                    cityPersonEC.text =
+                                        cepController.cepModel!.localidade;
+                                    statePersonEC.text =
+                                        cepController.cepModel!.uf;
+                                  } else {
+                                    // Caso o CEP não tenha sido encontrado
+                                    Messages.showError(
+                                        'O CEP: ${zipCodePersonEC.text} não foi encontrado',
+                                        context);
+                                    streetPersonEC.text = 'CEP não encontrado';
+                                  }
                                 },
                                 style: IconButton.styleFrom(
-                                    backgroundColor: SevenManagerTheme.tealBlue,
-                                    side: const BorderSide(
-                                        color: Colors
-                                            .transparent), // Remove border for a flat look
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                          bottomRight: Radius.circular(10),
-                                          topRight: Radius.circular(10)),
-                                    )),
+                                  backgroundColor: SevenManagerTheme.tealBlue,
+                                  side: const BorderSide(
+                                      color: Colors.transparent),
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      bottomRight: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                    ),
+                                  ),
+                                ),
                                 color: Colors.red,
                                 icon: Image.asset(
                                   AppImages.map,
@@ -263,7 +269,7 @@ class _AboutYouPageState extends State<AboutYouPage>
                         ),
                       ),
                       const SizedBox(height: 20),
-                       TextFormField(
+                      TextFormField(
                         controller: districtPersonEC,
                         focusNode: districtPersonFocus,
                         onFieldSubmitted: (_) async {
