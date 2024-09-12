@@ -77,7 +77,8 @@ mixin AboutYouPageMixin<T extends StatefulWidget> on State<T> {
     log('IMAGE AVATAR: ${imageProfileController.urlImage}');
     log('ABOUT YOU: Enviando dados para controller.');
     PersonsModel personModel = PersonsModel(
-      malePerson: malePersonEC.text,
+      idPerson: '021',
+      malePerson: registerController.sexOption,
       namePerson: registerController.dataAcountPage['userName'],
       imageAvatar: imageProfileController.urlImage,
       cpf: cpfEC.text,
@@ -91,12 +92,42 @@ mixin AboutYouPageMixin<T extends StatefulWidget> on State<T> {
       statePerson: statePersonEC.text,
       isPostalServicePerson: registerController.confirmAddress,
     );
-    Map<String, dynamic> personMap = personModel.toMap();
+
+    var PersonsModel(
+      :malePerson,
+      :namePerson,
+      :imageAvatar,
+      :cpf,
+      :birth,
+      :whastAppPerson,
+      :zipCodePerson,
+      :streetPerson,
+      :numberPerson,
+      :complementPerson,
+      :cityPerson,
+      :statePerson,
+      :isPostalServicePerson,
+
+    ) = personModel;
+
+    Map<String, dynamic> personMap = {
+     'malePerson' :malePerson,
+      'namePerson':namePerson,
+      'imageAvatar':imageAvatar,
+      'cpf':cpf,
+      'birth':birth,
+      'whastAppPerson':whastAppPerson,
+      'zipCodePerson':zipCodePerson,
+      'streetPerson':streetPerson,
+      'numberPerson':numberPerson,
+      'complementPerson':complementPerson,
+      'cityPerson':cityPerson,
+      'statePerson':statePerson,
+      'isPostalServicePerson':isPostalServicePerson,
+    }; //personModel.toMap();
 
     registerController.changeDataAboutYouPage(personMap);
   }
-
-  
 
   void _checkDataAboutYou() {
     if (registerController.submitFormYou()) _onTextFieldChange();
