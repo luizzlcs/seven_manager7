@@ -4,7 +4,7 @@ import 'dart:convert';
 class ChurchsModel {
 
   ChurchsModel({
-    required this.idChuchs,
+    required this.idChurchs,
     required this.districtChuchs,
     this.urlImageLogo,
     required this.cityChuchs,
@@ -14,7 +14,7 @@ class ChurchsModel {
     required this.creationDate,
   });
 
-  final String idChuchs;
+  final String idChurchs;
   final String? urlImageLogo;
   final String zipCodeChuchs;
   final String streetChuchs;
@@ -25,7 +25,7 @@ class ChurchsModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'idChuchs': idChuchs,
+      'idChuchs': idChurchs,
       'urlImageLogo': urlImageLogo,
       'zipCodeChuchs': zipCodeChuchs,
       'streetChuchs': streetChuchs,
@@ -38,7 +38,7 @@ class ChurchsModel {
 
   factory ChurchsModel.fromMap(Map<String, dynamic> map) {
     return ChurchsModel(
-      idChuchs: map['idChuchs'],
+      idChurchs: map['idChuchs'],
       urlImageLogo: map['urlImageLogo'] ?? '',
       zipCodeChuchs: map['zipCodeChuchs'] ?? '',
       streetChuchs: map['streetChuchs'] ?? '',

@@ -57,7 +57,7 @@ class AuthServiceFirebaseImpl {
 
         // Cria a igreja
         final newChurch = ChurchsModel(
-          idChuchs: '021',
+          idChurchs: '021',
           districtChuchs: districtChuchs,
           urlImageLogo: urlImageLogo,
           cityChuchs: cityChuchs,
