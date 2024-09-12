@@ -25,6 +25,7 @@ class LoginController with ChangeNotifier {
 
     if (auth == null) {
       loginStatus = LoginStatus.success;
+      message = 'Você logou com $email';
       notifyListeners();
     } else {
       message = auth;
