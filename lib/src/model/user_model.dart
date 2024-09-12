@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class UserModel {
-  UserModel({
+  const UserModel({
     required this.idUser,
     required this.userName,
     required this.userEmail,
