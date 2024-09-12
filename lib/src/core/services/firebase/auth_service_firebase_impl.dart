@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 import 'package:seven_manager/src/core/services/firebase/cloud_firestore.dart';
 import 'package:seven_manager/src/model/churchs_model.dart';
 import 'package:seven_manager/src/model/persons_model.dart';
@@ -13,7 +14,6 @@ class AuthServiceFirebaseImpl {
   final FirebaseAuth _auth;
 
   final CloudFirestore _cloudFirestore = CloudFirestore('churchs');
-
   Future<String?> createUser({
     required String namePerson,
     required String birth,
@@ -45,6 +45,8 @@ class AuthServiceFirebaseImpl {
 
       // Função auxiliar para criar a igreja se necessário
       Future<String?> createChurch() async {
+        DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
+
         // Verifica se a igreja já existe
         QuerySnapshot querySnapshot = await _cloudFirestore.getByField(
             fieldName: districtChuchs, value: districtChuchs);
@@ -55,15 +57,39 @@ class AuthServiceFirebaseImpl {
 
         // Cria a igreja
         final newChurch = ChurchsModel(
+          idChuchs: '021',
           districtChuchs: districtChuchs,
           urlImageLogo: urlImageLogo,
           cityChuchs: cityChuchs,
           zipCodeChuchs: zipCodeChuchs,
           streetChuchs: streetChuchs,
           stateChuchs: stateChuchs,
+          creationDate: formatter.format(DateTime.now()),
         );
+
+        var ChurchsModel(
+          districtChuchs: district,
+          urlImageLogo: urlAvatar,
+          cityChuchs: city,
+          zipCodeChuchs: zipCode,
+          streetChuchs: street,
+          stateChuchs: state,
+          creationDate: create,
+        ) = newChurch;
+
+        Map<String, dynamic> mapChurchs = {
+          'districtChuchs': district,
+          'urlImageLogo': urlAvatar,
+          'cityChuchs': city,
+          'zipCodeChuchs': zipCode,
+          'streetChuchs': street,
+          'stateChuchs': state,
+          'creationDate': create,
+
+        };
+
         DocumentReference docRef =
-            await _cloudFirestore.create(data: newChurch.toMap());
+            await _cloudFirestore.create(data: mapChurchs);
         return docRef.id;
       }
 
@@ -84,7 +110,7 @@ class AuthServiceFirebaseImpl {
 
       // Cria o usuário na coleção "persons"
       final newPerson = PersonsModel(
-        idChurch: churchId,
+        idPerson: churchId,
         malePerson: malePerson,
         namePerson: namePerson,
         imageAvatar: imageAvatar,
