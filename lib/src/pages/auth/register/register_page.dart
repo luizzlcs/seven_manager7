@@ -93,9 +93,8 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
       child: Scaffold(
         appBar: AppBar(
             title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const Text('Criar conta'),
             IconButton(
                 onPressed: () {
                   showPresentDialog(
@@ -111,7 +110,8 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
                     },
                   );
                 },
-                icon: const Icon(Icons.close)),
+                icon: const Icon(Icons.arrow_back)),
+            const Text('Criar conta'),
           ],
         )),
         body: Column(
