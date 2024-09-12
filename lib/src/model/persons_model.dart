@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class PersonsModel {
   const PersonsModel({
-    this.idChurch,
+    required this.idPerson,
     this.namePerson,
     this.imageAvatar,
     this.emailPerson,
@@ -18,7 +18,7 @@ class PersonsModel {
     required this.statePerson,
     this.isPostalServicePerson,
   });
-  final String? idChurch;
+  final String idPerson;
   final String? namePerson;
   final String? imageAvatar;
   final String? emailPerson;
@@ -36,7 +36,7 @@ class PersonsModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'idChurch': idChurch,
+      'idChurch': idPerson,
       'malePerson': malePerson,
       'namePerson': namePerson,
       'imageAvatar': imageAvatar,
@@ -55,7 +55,7 @@ class PersonsModel {
 
   factory PersonsModel.fromMap(Map<String, dynamic> map) {
     return PersonsModel(
-      idChurch: map['idChurch'] ?? '',
+      idPerson: map['idPerson'] ?? '',
       malePerson: map['malePerson'] ?? '',
       namePerson: map['namePerson'] ?? '',
       imageAvatar: map['imageAvatar'] ?? '',
