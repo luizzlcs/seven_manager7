@@ -126,6 +126,8 @@ class AuthServiceFirebaseImpl {
         streetPerson: streetPerson,
       );
       try {
+        await userCredential.user!.updateDisplayName(namePerson);
+        await userCredential.user!.updatePhotoURL(imageAvatar);
         await _cloudFirestore.createDocumentWithSpecificId(
             'persons', userId, newPerson.toMap());
       } on FirebaseException catch (e) {
@@ -180,12 +182,18 @@ class AuthServiceFirebaseImpl {
   // Método para logout
   Future<void> signOut() async {
     await _auth.signOut();
+    log('Deslogando do SevenManeger');
   }
+  
 
   // Método para verificar o estado de autenticação
   Stream<User?> get user {
     return _auth.authStateChanges();
   }
+
+  User? get currentUser {
+  return _auth.currentUser;
+}
 
   Future<String?> recovery({required String email}) async {
     try {
