@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:seven_manager/src/core/injection/injection.dart';
+import 'package:seven_manager/src/pages/auth/login/login_controller.dart';
 import 'package:seven_manager/src/pages/homePage/widgets/custom_avatar.dart';
 import '../../core/theme/seven_manager_theme.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+   
+ 
+
   @override
   Widget build(BuildContext context) {
+    final LoginController loginController = getIt();
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -41,20 +47,20 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Row(
+             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'Olá, Rodrigo',
-                    style: TextStyle(
+                    loginController.message,
+                    style: const TextStyle(
                         color: SevenManagerTheme.whiteColor,
                         fontSize: 35,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 110,
                 )
               ],
