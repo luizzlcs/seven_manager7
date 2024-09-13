@@ -7,12 +7,13 @@ import 'package:seven_manager/src/core/injection/injection.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   await FirebaseAppCheck.instance.activate(
-      // Para web
-      );
+    webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
+    androidProvider: AndroidProvider.debug,
+  );
+
   configureDependencies();
   runApp(const SevenManager());
 }
