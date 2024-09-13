@@ -51,11 +51,11 @@ class _LoginPageState extends State<LoginPage> with Loader {
       case LoginStatus.loading:
         break;
       case LoginStatus.success:
-        Messages.showSuccess(loginController.message, context);
-        Navigator.of(context).pushNamed(AppRouter.homePage);
+        Messages.showSuccess(loginController.message!, context);
+        Navigator.of(context).pushReplacementNamed(AppRouter.homePage);
         break;
       case LoginStatus.error:
-        Messages.showError(loginController.message, context);
+        Messages.showError(loginController.message!, context);
     }
   }
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:seven_manager/src/core/constants/app_router.dart';
+import 'package:seven_manager/src/core/injection/injection.dart';
+import 'package:seven_manager/src/core/services/firebase/auth_service_firebase_impl.dart';
 import '../../../core/theme/seven_manager_theme.dart';
 
 class CustomCircleAvatar extends StatelessWidget {
@@ -7,11 +9,14 @@ class CustomCircleAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AuthServiceFirebaseImpl authController = getIt();
+
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: GestureDetector(
           onTap: () {
-            Navigator.of(context).pushNamed(AppRouter.login);
+            authController.signOut();
+            Navigator.of(context).pushReplacementNamed(AppRouter.login);
           },
           child: Column(
             children: [

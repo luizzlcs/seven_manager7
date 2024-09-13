@@ -10,7 +10,9 @@ class LoginController with ChangeNotifier {
 
   LoginStatus loginStatus = LoginStatus.initial;
   bool isVisible = false;
-  String message = '';
+  
+  String? _message;
+  String? get message => _message;
 
   void changeVisible() {
     isVisible = !isVisible;
@@ -25,10 +27,12 @@ class LoginController with ChangeNotifier {
 
     if (auth == null) {
       loginStatus = LoginStatus.success;
-      message = 'Você logou com $email';
+      _message = 'Você logou com $email';
       notifyListeners();
+      _message = '';
+      loginStatus = LoginStatus.initial;
     } else {
-      message = auth;
+      _message = auth;
       loginStatus = LoginStatus.error;
       notifyListeners();
     }

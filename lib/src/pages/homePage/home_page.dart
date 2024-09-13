@@ -1,18 +1,19 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:seven_manager/src/core/injection/injection.dart';
-import 'package:seven_manager/src/pages/auth/login/login_controller.dart';
+import 'package:seven_manager/src/core/services/firebase/auth_service_firebase_impl.dart';
 import 'package:seven_manager/src/pages/homePage/widgets/custom_avatar.dart';
 import '../../core/theme/seven_manager_theme.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-   
- 
-
   @override
   Widget build(BuildContext context) {
-    final LoginController loginController = getIt();
+    final AuthServiceFirebaseImpl authController = getIt();
+    final user = authController.currentUser;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -52,8 +53,7 @@ class HomePage extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    loginController.message,
+                  child: Text('Olá, ${user?.displayName}!',
                     style: const TextStyle(
                         color: SevenManagerTheme.whiteColor,
                         fontSize: 35,
@@ -84,31 +84,40 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const Padding(
-                    padding:  EdgeInsets.all(0.0),
+                  Padding(
+                    padding: const EdgeInsets.all(0.0),
                     child: Column(
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
-                        SingleChildScrollView(
+                        const SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: [
-                             CustomCircleAvatar(),
-                             CustomCircleAvatar(),
-                             CustomCircleAvatar(),
-                             CustomCircleAvatar(),
-                             CustomCircleAvatar(),
-                             CustomCircleAvatar(),
-                             CustomCircleAvatar(),
-                             CustomCircleAvatar(),
-                             CustomCircleAvatar(),
-                             CustomCircleAvatar(),
-                              
+                              CustomCircleAvatar(),
+                              CustomCircleAvatar(),
+                              CustomCircleAvatar(),
+                              CustomCircleAvatar(),
+                              CustomCircleAvatar(),
+                              CustomCircleAvatar(),
+                              CustomCircleAvatar(),
+                              CustomCircleAvatar(),
+                              CustomCircleAvatar(),
+                              CustomCircleAvatar(),
                             ],
                           ),
                         ),
+                        ElevatedButton(
+                            onPressed: () async {
+                              log('${authController.currentUser?.displayName}');
+                              log('${authController.currentUser?.email}');
+                              log('${authController.currentUser?.emailVerified}');
+                              log('${authController.currentUser?.refreshToken}');
+                              log('${authController.currentUser?.uid}');
+                              log('${authController.currentUser?.providerData}');
+                            },
+                            child: const Text('data')),
                       ],
                     ),
                   )
