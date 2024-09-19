@@ -114,26 +114,6 @@ class _AboutYouChurchPageState extends State<AboutYouChurchPage>
                                     context);
                                 streetChuchsEC.text = 'CEP não encontrado';
                               }
-
-                              // cepChurchController
-                              //     .zipCodeSearch(zipCodeChuchsEC.text)
-                              //     .then((_) {
-                              //   if (cepChurchController.cepModel != null) {
-                              //     streetChuchsEC.text =
-                              //         cepChurchController.cepModel!.logradouro;
-                              //     districtChuchsEC.text =
-                              //         cepChurchController.cepModel!.bairro;
-                              //     cityChuchsEC.text =
-                              //         cepChurchController.cepModel!.localidade;
-                              //     stateChuchsEC.text =
-                              //         cepChurchController.cepModel!.uf;
-                              //   } else {
-                              //     Messages.showInfo(
-                              //         'O CEP: ${zipCodeChuchsEC.text} não foi encontrado',
-                              //         context);
-                              //     streetChuchsEC.text = 'CEP não encontrado';
-                              //   }
-                              // });
                             },
                             style: IconButton.styleFrom(
                               backgroundColor: SevenManagerTheme.tealBlue,

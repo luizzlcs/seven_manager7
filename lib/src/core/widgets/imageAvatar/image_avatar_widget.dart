@@ -90,7 +90,7 @@ class _ImageAvatarWidgetState extends State<ImageAvatarWidget> with AutomaticKee
           bottom: 5,
           right: 5,
           child: CircleAvatar(
-            backgroundColor: Colors.grey[200],
+            backgroundColor: SevenManagerTheme.tealBlue,
             child: IconButton(
               onPressed: () {
                 showBottomSheet();
@@ -100,7 +100,7 @@ class _ImageAvatarWidgetState extends State<ImageAvatarWidget> with AutomaticKee
                   PhosphorIconsStyle.regular,
                 ),
               ),
-              color: Colors.grey[800],
+              color: Colors.white,
             ),
           ),
         ),
