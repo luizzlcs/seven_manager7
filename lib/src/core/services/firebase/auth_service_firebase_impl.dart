@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
+import 'package:seven_manager/src/core/injection/injection.dart';
 import 'package:seven_manager/src/core/services/firebase/cloud_firestore.dart';
 import 'package:seven_manager/src/model/churchs_model.dart';
 import 'package:seven_manager/src/model/persons_model.dart';
@@ -13,7 +14,8 @@ class AuthServiceFirebaseImpl {
 
   final FirebaseAuth _auth;
 
-  final CloudFirestore _cloudFirestore = CloudFirestore('churchs');
+  // final CloudFirestore _cloudFirestore = CloudFirestore(collection: 'churchs');
+  final CloudFirestore _cloudFirestore = getIt();
   Future<String?> createUser({
     required String namePerson,
     required String birth,
@@ -49,7 +51,9 @@ class AuthServiceFirebaseImpl {
 
         // Verifica se a igreja já existe
         QuerySnapshot querySnapshot = await _cloudFirestore.getByField(
-            fieldName: districtChuchs, value: districtChuchs);
+            collection: 'churchs',
+            fieldName: districtChuchs,
+            value: districtChuchs);
 
         if (querySnapshot.docs.isNotEmpty) {
           return querySnapshot.docs.first.id;
@@ -85,11 +89,10 @@ class AuthServiceFirebaseImpl {
           'streetChuchs': street,
           'stateChuchs': state,
           'creationDate': create,
-
         };
 
-        DocumentReference docRef =
-            await _cloudFirestore.create(data: mapChurchs);
+        DocumentReference docRef = await _cloudFirestore.create(
+            collection: 'churchs', data: mapChurchs);
         return docRef.id;
       }
 
@@ -129,7 +132,7 @@ class AuthServiceFirebaseImpl {
         await userCredential.user!.updateDisplayName(namePerson);
         await userCredential.user!.updatePhotoURL(imageAvatar);
         await _cloudFirestore.createDocumentWithSpecificId(
-            'persons', userId, newPerson.toMap());
+            collection: 'persons', documentId: userId, data: newPerson.toMap());
       } on FirebaseException catch (e) {
         // Erro ao criar a pessoa
         await userCredential.user!.delete();
@@ -184,7 +187,6 @@ class AuthServiceFirebaseImpl {
     await _auth.signOut();
     log('Deslogando do SevenManeger');
   }
-  
 
   // Método para verificar o estado de autenticação
   Stream<User?> get user {
@@ -192,8 +194,8 @@ class AuthServiceFirebaseImpl {
   }
 
   User? get currentUser {
-  return _auth.currentUser;
-}
+    return _auth.currentUser;
+  }
 
   Future<String?> recovery({required String email}) async {
     try {
