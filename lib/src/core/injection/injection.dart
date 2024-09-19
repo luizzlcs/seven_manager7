@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:seven_manager/src/core/services/dio_http_client.dart';
+import 'package:seven_manager/src/core/services/firebase/cloud_firestore.dart';
 import 'package:seven_manager/src/core/services/firebase/firebase_storage_service.dart';
 import 'package:seven_manager/src/pages/auth/register/pages/aboutYouchurchPage/image_profile_controller_church.dart';
 import 'package:seven_manager/src/interfaces/http_client.dart';
@@ -36,6 +37,9 @@ void configureDependencies() {
   // Services
   getIt.registerLazySingleton<FirebaseStorageService>(() => FirebaseStorageService());
   getIt.registerLazySingleton<CepRepository>(() => CepRepository(httpClient: getIt<IHttpClient>()));
+  getIt.registerLazySingleton<CloudFirestore>(() => CloudFirestore());
+
+  // Repository
 
   // HTTP
   getIt.registerLazySingleton<Dio>(()=> Dio());
