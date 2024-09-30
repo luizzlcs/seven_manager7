@@ -114,154 +114,164 @@ class _RegisterPageState extends State<RegisterPage> with Loader {
             const Text('Criar conta'),
           ],
         )),
-        body: Column(
-          children: [
-            const SizedBox(
-              height: 16,
+        body: Align(
+          alignment: Alignment.center,
+          child: Container(
+            constraints: const BoxConstraints(
+              maxWidth: 480,
+              minWidth: 250,
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8, right: 8),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: SevenManagerTheme.whiteColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                    ),
-                  ),
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 16,
+                ),
+                Expanded(
                   child: Padding(
-                    padding:
-                        const EdgeInsets.only(top: 10, left: 10, right: 10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: SizedBox(
-                            child: PageView(
-                              physics: const NeverScrollableScrollPhysics(),
-                              controller: _controller,
-                              children: const [
-                                CreateAccountPage(),
-                                AboutYouPage(),
-                                AboutYouChurchPage(),
-                                CheckData(),
+                    padding: const EdgeInsets.only(left: 8, right: 8),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: SevenManagerTheme.whiteColor,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
+                        ),
+                      ),
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.only(top: 10, left: 10, right: 10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                              child: SizedBox(
+                                child: PageView(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  controller: _controller,
+                                  children: const [
+                                    CreateAccountPage(),
+                                    AboutYouPage(),
+                                    AboutYouChurchPage(),
+                                    CheckData(),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Visibility(
+                                  visible: (_currentPage >= 1),
+                                  child: ButtonWidget(
+                                    name: 'VOLTAR',
+                                    alignment: IconAlignment.start,
+                                    icon: Icons.arrow_back_ios,
+                                    function: () {
+                                      setState(() {});
+                                      previewPage();
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Visibility(
+                                  visible:
+                                      (_currentPage >= 0 && _currentPage < 3),
+                                  child: ButtonWidget(
+                                    name: 'AVANÇAR',
+                                    alignment: IconAlignment.end,
+                                    icon: Icons.arrow_forward_ios_outlined,
+                                    function: () {
+                                      setState(() {});
+                                      switch (_currentPage) {
+                                        case 0:
+                                          accountNextPage();
+                                          break;
+                                        case 1:
+                                          youNextPage();
+                                        case 2:
+                                          churchNextPage();
+                                          break;
+                                      }
+                                    },
+                                  ),
+                                ),
+                                AnimatedBuilder(
+                                  animation: registerController,
+                                  builder: (context, child) {
+                                    return Visibility(
+                                      visible: _currentPage == 3,
+                                      child: Column(
+                                        children: [
+                                          registerController.registerStatus ==
+                                                  RegisterStatus.loading
+                                              ? const SevenLoader()
+                                              : ButtonWidget(
+                                                  name: 'CONCLUIR',
+                                                  alignment: IconAlignment.start,
+                                                  icon: Icons.folder_open_sharp,
+                                                  function: () async {
+                                                    await registerController
+                                                        .createUser(context);
+          
+                                                    if (imageLogoController
+                                                            .urlImage !=
+                                                        null) {
+                                                      if (imageLogoController
+                                                              .imageFile !=
+                                                          null) {
+                                                        imageLogoController
+                                                            .clearUrl();
+                                                        imageLogoController
+                                                            .clearFile();
+                                                      }
+                                                    }
+                                                    if (imageAvatarController
+                                                            .urlImage !=
+                                                        null) {
+                                                      if (imageAvatarController
+                                                              .imageFile !=
+                                                          null) {
+                                                        imageAvatarController
+                                                            .clearUrl();
+                                                        imageAvatarController
+                                                            .clearFile();
+                                                      }
+                                                    }
+                                                  },
+                                                ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                )
                               ],
                             ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Visibility(
-                              visible: (_currentPage >= 1),
-                              child: ButtonWidget(
-                                name: 'VOLTAR',
-                                alignment: IconAlignment.start,
-                                icon: Icons.arrow_back_ios,
-                                function: () {
-                                  setState(() {});
-                                  previewPage();
-                                },
+                            const SizedBox(height: 10),
+                            SmoothPageIndicator(
+                              controller: _controller,
+                              count: 4,
+                              effect: const ExpandingDotsEffect(
+                                activeDotColor: SevenManagerTheme.tealBlue,
+                                dotColor: Color.fromARGB(255, 117, 188, 230),
+                                dotHeight: 16,
+                                dotWidth: 16,
+                                spacing: 12,
+                                //verticalOffset: 50,
                               ),
                             ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Visibility(
-                              visible: (_currentPage >= 0 && _currentPage < 3),
-                              child: ButtonWidget(
-                                name: 'AVANÇAR',
-                                alignment: IconAlignment.end,
-                                icon: Icons.arrow_forward_ios_outlined,
-                                function: () {
-                                  setState(() {});
-                                  switch (_currentPage) {
-                                    case 0:
-                                      accountNextPage();
-                                      break;
-                                    case 1:
-                                      youNextPage();
-                                    case 2:
-                                      churchNextPage();
-                                      break;
-                                  }
-                                },
-                              ),
-                            ),
-                            AnimatedBuilder(
-                              animation: registerController,
-                              builder: (context, child) {
-                                return Visibility(
-                                  visible: _currentPage == 3,
-                                  child: Column(
-                                    children: [
-                                      registerController.registerStatus ==
-                                              RegisterStatus.loading
-                                          ? const SevenLoader()
-                                          : ButtonWidget(
-                                              name: 'CONCLUIR',
-                                              alignment: IconAlignment.start,
-                                              icon: Icons.folder_open_sharp,
-                                              function: () async {
-                                                await registerController
-                                                    .createUser(context);
-
-                                                if (imageLogoController
-                                                        .urlImage !=
-                                                    null) {
-                                                  if (imageLogoController
-                                                          .imageFile !=
-                                                      null) {
-                                                    imageLogoController
-                                                        .clearUrl();
-                                                    imageLogoController
-                                                        .clearFile();
-                                                  }
-                                                }
-                                                if (imageAvatarController
-                                                        .urlImage !=
-                                                    null) {
-                                                  if (imageAvatarController
-                                                          .imageFile !=
-                                                      null) {
-                                                    imageAvatarController
-                                                        .clearUrl();
-                                                    imageAvatarController
-                                                        .clearFile();
-                                                  }
-                                                }
-                                              },
-                                            ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            )
+                            const SizedBox(height: 10),
                           ],
                         ),
-                        const SizedBox(height: 10),
-                        SmoothPageIndicator(
-                          controller: _controller,
-                          count: 4,
-                          effect: const ExpandingDotsEffect(
-                            activeDotColor: SevenManagerTheme.tealBlue,
-                            dotColor: Color.fromARGB(255, 117, 188, 230),
-                            dotHeight: 16,
-                            dotWidth: 16,
-                            spacing: 12,
-                            //verticalOffset: 50,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

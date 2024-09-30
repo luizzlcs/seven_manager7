@@ -60,110 +60,119 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: ()=> FocusScope.of(context).unfocus(),
+      onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(),
-        body: Column(
-          children: [
-            const SizedBox(
-              height: 16,
+        body: Align(
+          alignment: Alignment.center,
+          child: Container(
+            constraints: const BoxConstraints(
+              maxWidth: 480,
+              minWidth: 250,
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 8,
-                  right: 8,
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 16,
                 ),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: SevenManagerTheme.whiteColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                    ),
-                  ),
+                Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 30),
-                    child: SingleChildScrollView(
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          // mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const SizedBox(
-                              height: 90,
-                            ),
-                            BorderedText(
-                              strokeColor: SevenManagerTheme.whiteColor,
-                              strokeCap: StrokeCap.round,
-                              child: const Text(
-                                'RECUPERAR SENHA',
-                                style: TextStyle(
-                                  fontSize: 30,
+                    padding: const EdgeInsets.only(
+                      left: 8,
+                      right: 8,
+                    ),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: SevenManagerTheme.whiteColor,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 30),
+                        child: SingleChildScrollView(
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              // mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const SizedBox(
+                                  height: 90,
+                                ),
+                                BorderedText(
+                                  strokeColor: SevenManagerTheme.whiteColor,
+                                  strokeCap: StrokeCap.round,
+                                  child: const Text(
+                                    'RECUPERAR SENHA',
+                                    style: TextStyle(
+                                      fontSize: 30,
+                                      color: SevenManagerTheme.tealBlue,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 35),
+                                const Icon(
+                                  Icons.lock_clock,
+                                  size: 150,
                                   color: SevenManagerTheme.tealBlue,
                                 ),
-                              ),
+                                const SizedBox(height: 35),
+                                const Text(
+                                  textAlign: TextAlign.center,
+                                  'Para recuperar sua senha, é necessário ter, ao menos'
+                                  ' o e-mail utilizado para o login.',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: SevenManagerTheme.tealBlue,
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                TextFormField(
+                                  validator: Validatorless.multiple(
+                                    [
+                                      Validatorless.email(
+                                          'O valor digitado não é um E-mail válido.'),
+                                      Validatorless.required(
+                                          'Você ainda anão digitou um E-mail.')
+                                    ],
+                                  ),
+                                  autovalidateMode: AutovalidateMode.always,
+                                  controller: _emailEC,
+                                  decoration: const InputDecoration(
+                                    hintText: 'Digite seu email',
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                AnimatedBuilder(
+                                  animation: recoverController,
+                                  builder: (context, child) {
+                                    return Column(
+                                      children: [
+                                        recoverController.recoverStatus ==
+                                                RecoverStatus.loading
+                                            ? const SevenLoader()
+                                            : ElevatedButton(
+                                                onPressed: () {
+                                                  _formSubmit();
+                                                },
+                                                child: const Text('Continuar'),
+                                              )
+                                      ],
+                                    );
+                                  },
+                                )
+                              ],
                             ),
-                            const SizedBox(height: 35),
-                            const Icon(
-                              Icons.lock_clock,
-                              size: 150,
-                              color: SevenManagerTheme.tealBlue,
-                            ),
-                            const SizedBox(height: 35),
-                            const Text(
-                              textAlign: TextAlign.center,
-                              'Para recuperar sua senha, é necessário ter, ao menos'
-                              ' o e-mail utilizado para o login.',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: SevenManagerTheme.tealBlue,
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            TextFormField(
-                              validator: Validatorless.multiple(
-                                [
-                                  Validatorless.email(
-                                      'O valor digitado não é um E-mail válido.'),
-                                  Validatorless.required(
-                                      'Você ainda anão digitou um E-mail.')
-                                ],
-                              ),
-                              autovalidateMode: AutovalidateMode.always,
-                              controller: _emailEC,
-                              decoration: const InputDecoration(
-                                hintText: 'Digite seu email',
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            AnimatedBuilder(
-                              animation: recoverController,
-                              builder: (context, child) {
-                                return Column(
-                                  children: [
-                                    recoverController.recoverStatus ==
-                                            RecoverStatus.loading
-                                        ? const SevenLoader()
-                                        : ElevatedButton(
-                                            onPressed: () {
-                                              _formSubmit();
-                                            },
-                                            child: const Text('Continuar'),
-                                          )
-                                  ],
-                                );
-                              },
-                            )
-                          ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
