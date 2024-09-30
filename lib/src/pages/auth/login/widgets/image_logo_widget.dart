@@ -11,15 +11,18 @@ class ImageLogoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-      radius: 75,
-      backgroundColor: SevenManagerTheme.greenYellow,
+    return Padding(
+      padding: const EdgeInsets.only(top: 15.0),
       child: CircleAvatar(
-        radius: 72,
+        radius: 68,
         backgroundColor: SevenManagerTheme.greenYellow,
-        backgroundImage: pathImage.contains('https:')
-            ? NetworkImage(pathImage)
-            : AssetImage(pathImage),
+        child: CircleAvatar(
+          radius: 65,
+          backgroundColor: SevenManagerTheme.greenYellow,
+          backgroundImage: pathImage.contains('httpss:')
+              ? NetworkImage(pathImage)
+              : AssetImage(pathImage),
+        ),
       ),
     );
   }
